@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">MyMojo</string>
+    <string name="lKetoNumber">Кето</string>
+    <string name="lSugarNumber">Сахар</string>
+    <string name="lCreateDate">Дата замера</string>
+    <string name="lWeight">Вес</string>
+</resources>
