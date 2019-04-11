@@ -22,10 +22,10 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final List<Mojo> mojoList = new ArrayList<>();
-    private ArrayAdapter<Mojo> listViewAdapter;
     private RecyclerView mMojoRecyclerView;
     private RecyclerView.Adapter mMojoAdapter;
+
+    private MojoDatabaseHelper db;
 
     private static final int ADD_MOJO_REQUEST = 1000;
 
@@ -43,20 +43,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
-        MojoDatabaseHelper db = new MojoDatabaseHelper(this);
-        db.createDefaultMojoIfNeed();
-
-        List<Mojo> list =  db.getAllMojo();
-        this.mojoList.addAll(list);
+        db = new MojoDatabaseHelper(this);
 
         mMojoRecyclerView = findViewById(R.id.rvMojo);
         mMojoRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        mMojoAdapter = new MojoAdapter(this, list);
-        mMojoRecyclerView.setAdapter(mMojoAdapter);
-
+        RefreshDB();
     }
 
     @Override
@@ -80,11 +72,18 @@ public class MainActivity extends AppCompatActivity {
                 mojo.setWeight(Float.parseFloat(data.getStringExtra("WEIGHT")));
                 db.addMojo(mojo);
 
+                RefreshDB();
 
             } catch (ParseException e) {
                 Log.i("***", "error");
             }
 
         }
+    }
+
+    private void RefreshDB() {
+        List<Mojo> list =  db.getAllMojo();
+        mMojoAdapter = new MojoAdapter(this, list);
+        mMojoRecyclerView.setAdapter(mMojoAdapter);
     }
 }
