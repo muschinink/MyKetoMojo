@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     private MojoDatabaseHelper db;
 
-    private static final int ADD_MOJO_REQUEST = 1000;
+    public static final int ADD_MOJO_REQUEST = 1000;
     public static final int EDIT_MOJO_REQUEST = 1001;
 
     public void EditMojoRequest() {
@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, AddEditMojoActivity.class);
+                intent.putExtra("requestCode", ADD_MOJO_REQUEST);
                 startActivityForResult(intent, ADD_MOJO_REQUEST);
             }
         });
@@ -73,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
             SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.ENGLISH);
             d = df.parse(data.getStringExtra("CREATE_DATE") + " " + data.getStringExtra("CREATE_TIME"));
 
+            mojo.setID(data.getIntExtra("ID", 0));
             mojo.setCreateDate((new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.sss")).format(d));
             mojo.setKetoNumber(Float.parseFloat(data.getStringExtra("KETONE")));
             mojo.setGlucoseNumber(Float.parseFloat(data.getStringExtra("GLUCOSE")));
@@ -82,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
             Log.i("***", "error");
         }
 
-        if (requestCode == EDIT_MOJO_REQUEST) {
+        if (requestCode == EDIT_MOJO_REQUEST && mojo.getID() != 0) {
             db.updateMojo(mojo);
         }
 

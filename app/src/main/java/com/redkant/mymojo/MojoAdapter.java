@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,9 @@ import com.redkant.mymojo.db.Mojo;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import static com.redkant.mymojo.MainActivity.EDIT_MOJO_REQUEST;
@@ -24,7 +28,7 @@ public class MojoAdapter extends RecyclerView.Adapter<MojoAdapter.ViewHolder> {
     private List<Mojo> mDataset;
     private Context context;
 
-    public class ViewHolder extends RecyclerView.ViewHolder /*implements View.OnClickListener*/ {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
         public TextView tvCreateDate;
         public TextView tvKetoNumber;
@@ -33,8 +37,6 @@ public class MojoAdapter extends RecyclerView.Adapter<MojoAdapter.ViewHolder> {
 
         public ViewHolder(View v) {
             super(v);
-
-//            v.setOnClickListener(this);
 
             tvCreateDate = v.findViewById(R.id.tvCreateDate);
             tvKetoNumber = v.findViewById(R.id.tvKetoNumber);
@@ -52,17 +54,6 @@ public class MojoAdapter extends RecyclerView.Adapter<MojoAdapter.ViewHolder> {
             tvGKI.setText(Float.toString(f));
         }
 
-/*
-        @Override
-        public void onClick(View v) {
-            TextView tv = (TextView)v.findViewById(R.id.tvCreateDate);
-
-            Intent intent = new Intent(v.getContext(), AddEditMojoActivity.class);
-            ((Activity)v.getContext()).startActivity(intent);
-
-            Toast.makeText(v.getContext(), "date = " + tv.getText(), Toast.LENGTH_SHORT).show();
-        }
-*/
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
@@ -85,18 +76,31 @@ public class MojoAdapter extends RecyclerView.Adapter<MojoAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
+        final int pos = position;
+
         holder.bind(mDataset.get(position));
 
         holder.tvCreateDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(context, AddEditMojoActivity.class);
-                intent.putExtra("ID", mDataset.get(position).getID());
-                intent.putExtra("CREATE_DATE", ((EditText)v.findViewById(R.id.etCreateDate)).getText().toString());
-                intent.putExtra("CREATE_TIME", ((EditText)v.findViewById(R.id.etCreateTime)).getText().toString());
-                intent.putExtra("KETONE", ((EditText)v.findViewById(R.id.etKetone)).getText().toString());
-                intent.putExtra("GLUCOSE", ((EditText)v.findViewById(R.id.etGlucose)).getText().toString());
-                intent.putExtra("WEIGHT", ((EditText)v.findViewById(R.id.etWeight)).getText().toString());
+                intent.putExtra("requestCode", EDIT_MOJO_REQUEST);
+                intent.putExtra("ID", mDataset.get(pos).getID());
+
+                Date d = null;
+                try {
+                    d = new SimpleDateFormat("dd.MM.yyyy HH:mm").parse(mDataset.get(pos).getCreateDate());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                intent.putExtra("CREATE_DATE", new SimpleDateFormat("dd.MM.yyyy").format(d));
+                intent.putExtra("CREATE_TIME", new SimpleDateFormat("HH:mm").format(d));
+
+                intent.putExtra("KETONE", String.valueOf(mDataset.get(pos).getKetoNumber()));
+                intent.putExtra("GLUCOSE", String.valueOf(mDataset.get(pos).getGlucoseNumber()));
+                intent.putExtra("WEIGHT", String.valueOf(mDataset.get(pos).getWeight()));
 
                 ((Activity) context).startActivityForResult(intent, EDIT_MOJO_REQUEST);
             }

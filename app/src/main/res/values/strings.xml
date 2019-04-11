@@ -1,8 +1,7 @@
 <resources>
     <string name="app_name">MyMojo</string>
-    <string name="lKetoNumber">Ketone</string>
-    <string name="lSugarNumber">Glucose</string>
-    <string name="lCreateDate">Measuring date</string>
+    <string name="lKetoNumber">K</string>
+    <string name="lSugarNumber">G</string>
     <string name="lWeight">Weight</string>
     <string name="lGKI">GKI</string>
     <string name="hintKetone">Kenote index - mmol/L</string>
@@ -10,4 +9,5 @@
     <string name="hintWeight">Weight - kg</string>
     <string name="bOK">OK</string>
     <string name="bCancel">Cancel</string>
+    <string name="lCreateDate">Measuring date</string>
 </resources>

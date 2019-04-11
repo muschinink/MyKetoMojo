@@ -1,17 +1,10 @@
 package com.redkant.mymojo;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatDialogFragment;
@@ -19,56 +12,82 @@ import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import static com.redkant.mymojo.MainActivity.ADD_MOJO_REQUEST;
+import static com.redkant.mymojo.MainActivity.EDIT_MOJO_REQUEST;
+
 public class AddEditMojoActivity extends AppCompatActivity {
 
+    int mID = 0;
     EditText etCreateDate;
     EditText etCreateTime;
+    EditText etKetone;
+    EditText etGlucose;
+    EditText etWeight;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_edit_mojo);
 
-        EditText etDate = (EditText)findViewById(R.id.etCreateDate);
-        etDate.setText((new SimpleDateFormat("dd.MM.yyyy")).format(new Date()));
+        int requestCode = getIntent().getIntExtra("requestCode", 0);
 
-        EditText etTime = (EditText)findViewById(R.id.etCreateTime);
-        etTime.setText((new SimpleDateFormat("HH:mm")).format(new Date()));
+        if (requestCode == EDIT_MOJO_REQUEST) {
 
-        etCreateTime = (EditText)findViewById(R.id.etCreateTime);
-        etCreateTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DialogFragment dFragment = new TimePickerFragment();
-                dFragment.show(getSupportFragmentManager(), "Time Picker");
-            }
-        });
+            mID = getIntent().getIntExtra("ID", 0);
 
-        etCreateDate = (EditText)findViewById(R.id.etCreateDate);
-        etCreateDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DialogFragment dFragment = new DatePickerFragment();
-                dFragment.show(getSupportFragmentManager(), "Date Picker");
-            }
-        });
+            etCreateDate = (EditText)findViewById(R.id.etCreateDate);
+            etCreateDate.setText(getIntent().getStringExtra("CREATE_DATE"));
+
+            etCreateTime = (EditText)findViewById(R.id.etCreateTime);
+            etCreateTime.setText(getIntent().getStringExtra("CREATE_TIME"));
+
+            etKetone = (EditText) findViewById(R.id.etKetone);
+            etKetone.setText(getIntent().getStringExtra("KETONE"));
+
+            etGlucose = (EditText) findViewById(R.id.etGlucose);
+            etGlucose.setText(getIntent().getStringExtra("GLUCOSE"));
+
+            etWeight = (EditText) findViewById(R.id.etWeight);
+            etWeight.setText(getIntent().getStringExtra("WEIGHT"));
+        }
+
+        if (requestCode == ADD_MOJO_REQUEST) {
+            etCreateDate = (EditText) findViewById(R.id.etCreateDate);
+            etCreateDate.setText((new SimpleDateFormat("dd.MM.yyyy")).format(new Date()));
+            etCreateDate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DialogFragment dFragment = new DatePickerFragment();
+                    dFragment.show(getSupportFragmentManager(), "Date Picker");
+                }
+            });
+
+            etCreateTime = (EditText) findViewById(R.id.etCreateTime);
+            etCreateTime.setText((new SimpleDateFormat("HH:mm")).format(new Date()));
+            etCreateTime.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DialogFragment dFragment = new TimePickerFragment();
+                    dFragment.show(getSupportFragmentManager(), "Time Picker");
+                }
+            });
+        }
 
     }
 
     public void bOKAddEditMojoClick(View view) {
         Intent answerIntent = new Intent();
 
+        answerIntent.putExtra("ID", mID);
         answerIntent.putExtra("CREATE_DATE", ((EditText)findViewById(R.id.etCreateDate)).getText().toString());
         answerIntent.putExtra("CREATE_TIME", ((EditText)findViewById(R.id.etCreateTime)).getText().toString());
         answerIntent.putExtra("KETONE", ((EditText)findViewById(R.id.etKetone)).getText().toString());
