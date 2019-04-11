@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.redkant.mymojo.db.Mojo;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 public class MojoAdapter extends RecyclerView.Adapter<MojoAdapter.ViewHolder> {
@@ -19,22 +21,24 @@ public class MojoAdapter extends RecyclerView.Adapter<MojoAdapter.ViewHolder> {
         public TextView tvCreateDate;
         public TextView tvKetoNumber;
         public TextView tvSugarNumber;
-        public TextView tvWeight;
+        public TextView tvGKI;
 
         public ViewHolder(View v) {
             super(v);
             tvCreateDate = v.findViewById(R.id.tvCreateDate);
             tvKetoNumber = v.findViewById(R.id.tvKetoNumber);
             tvSugarNumber = v.findViewById(R.id.tvSugarNumber);
-            tvWeight = v.findViewById(R.id.tvWeight);
+            tvGKI = v.findViewById(R.id.tvGKI);
         }
 
         public void bind(final Mojo item) {
-
             tvCreateDate.setText(item.getCreateDate());
             tvKetoNumber.setText(Float.toString(item.getKetoNumber()));
-            tvSugarNumber.setText(Float.toString(item.getSugarNumber()));
-            tvWeight.setText(Float.toString(item.getWeight()));
+            tvSugarNumber.setText(Float.toString(item.getGlucoseNumber()));
+
+            float gki = item.getGlucoseNumber()/18/item.getKetoNumber();
+            float f = new BigDecimal(gki).setScale(1, RoundingMode.HALF_EVEN).floatValue();
+            tvGKI.setText(Float.toString(f));
         }
 
     }

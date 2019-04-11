@@ -5,13 +5,16 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.redkant.mymojo.db.Mojo;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class MojoDatabaseHelper extends SQLiteOpenHelper {
 
@@ -54,7 +57,7 @@ public class MojoDatabaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(COLUMN_CREATE_DATE, mojo.getCreateDate());
         values.put(COLUMN_KETO_NUMBER, mojo.getKetoNumber());
-        values.put(COLUMN_SUGAR_NUMBER, mojo.getSugarNumber());
+        values.put(COLUMN_SUGAR_NUMBER, mojo.getGlucoseNumber());
         values.put(COLUMN_WEIGHT, mojo.getWeight());
 
         db.insert(TABLE_MOJO, null, values);
@@ -86,14 +89,15 @@ public class MojoDatabaseHelper extends SQLiteOpenHelper {
         return mojo;
     }
 
-    public List<Mojo> getAllNotes() {
+    public List<Mojo> getAllMojo() {
         List<Mojo> mogoList = new ArrayList<Mojo>();
 
         String selectQuery = "SELECT " + COLUMN_ID +
                 ", " + COLUMN_CREATE_DATE +
                 ", " + COLUMN_KETO_NUMBER +
                 ", " + COLUMN_SUGAR_NUMBER +
-                ", " + COLUMN_WEIGHT + " FROM " + TABLE_MOJO;
+                ", " + COLUMN_WEIGHT + " FROM " + TABLE_MOJO +
+                " ORDER BY " + COLUMN_CREATE_DATE + " DESC ";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -103,9 +107,18 @@ public class MojoDatabaseHelper extends SQLiteOpenHelper {
             do {
                 Mojo mojo = new Mojo();
                 mojo.setID(Integer.parseInt(cursor.getString(0)));
-                mojo.setCreateDate(cursor.getString(1));
+
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.sss", Locale.ENGLISH);
+                try {
+                    Date d = df.parse(cursor.getString(1));
+                    df.applyPattern("dd.MM.yyyy HH:mm");
+                    mojo.setCreateDate(df.format(d));
+                } catch (ParseException e) {
+                    Log.i("***", cursor.getString(1));
+                }
+
                 mojo.setKetoNumber(Float.parseFloat(cursor.getString(2)));
-                mojo.setSugarNumber(Float.parseFloat(cursor.getString(3)));
+                mojo.setGlucoseNumber(Float.parseFloat(cursor.getString(3)));
                 mojo.setWeight(Float.parseFloat(cursor.getString(4)));
 
                 mogoList.add(mojo);
@@ -144,7 +157,7 @@ public class MojoDatabaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(COLUMN_CREATE_DATE, mojo.getCreateDate());
         values.put(COLUMN_KETO_NUMBER, mojo.getKetoNumber());
-        values.put(COLUMN_SUGAR_NUMBER, mojo.getSugarNumber());
+        values.put(COLUMN_SUGAR_NUMBER, mojo.getGlucoseNumber());
         values.put(COLUMN_WEIGHT, mojo.getWeight());
 
         // updating row

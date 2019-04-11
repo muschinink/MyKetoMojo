@@ -11,21 +11,124 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:text="@string/lCreateDate"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/etCreateDate" />
 
     <EditText
         android:id="@+id/etCreateDate"
-        android:layout_width="wrap_content"
+        android:layout_width="119dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:cursorVisible="false"
         android:ems="10"
-        android:inputType="datetime"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:focusable="false"
+        android:inputType="none"
+        android:textIsSelectable="true"
         app:layout_constraintStart_toEndOf="@+id/textView2"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="CreateDate" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/lKetoNumber"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/etKetone" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/lSugarNumber"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/etGlucose" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/lWeight"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/etWeight" />
+
+    <EditText
+        android:id="@+id/etKetone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="@string/hintKetone"
+        android:inputType="numberDecimal"
+        app:layout_constraintStart_toStartOf="@+id/etCreateDate"
+        app:layout_constraintTop_toBottomOf="@+id/etCreateDate" />
+
+    <EditText
+        android:id="@+id/etGlucose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="@string/hintGlucose"
+        android:inputType="numberDecimal"
+        app:layout_constraintStart_toStartOf="@+id/etKetone"
+        app:layout_constraintTop_toBottomOf="@+id/etKetone" />
+
+    <EditText
+        android:id="@+id/etWeight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="@string/hintWeight"
+        android:inputType="numberDecimal"
+        app:layout_constraintStart_toStartOf="@+id/etGlucose"
+        app:layout_constraintTop_toBottomOf="@+id/etGlucose" />
+
+    <EditText
+        android:id="@+id/etCreateTime"
+        android:layout_width="82dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:cursorVisible="false"
+        android:ems="10"
+        android:focusable="false"
+        android:inputType="none"
+        android:textIsSelectable="true"
+        app:layout_constraintStart_toEndOf="@+id/etCreateDate"
+        app:layout_constraintTop_toTopOf="@+id/etCreateDate"
+        tools:text="Time" />
+
+    <Button
+        android:id="@+id/bOKAddEditMojo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:onClick="bOKAddEditMojoClick"
+        android:text="@string/bOK"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/bCancelAddEditMojo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:onClick="bCancelAddEditMojoClick"
+        android:text="@string/bCancel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/bOKAddEditMojo" />
+
 </android.support.constraint.ConstraintLayout>

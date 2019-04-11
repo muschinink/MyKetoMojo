@@ -1,15 +1,13 @@
 package com.redkant.mymojo.db;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class Mojo implements Serializable {
 
     private int mID;
     private String mCreateDate;
     private float mKetoNumber;
-    private float mSugarNumber;
+    private float mGlucoseNumber;
     private float mWeight;
 
     public Mojo() {
@@ -21,13 +19,13 @@ public class Mojo implements Serializable {
         mKetoNumber = ketoNumber;
     }
 
-    public Mojo(String createDate, float ketoNumber, float sugarNumber) {
+    public Mojo(String createDate, float ketoNumber, float glucoseNumber) {
         this(createDate, ketoNumber);
-        mSugarNumber = sugarNumber;
+        mGlucoseNumber = glucoseNumber;
     }
 
-    public Mojo(String createDate, float ketoNumber, float sugarNumber, float weight) {
-        this(createDate, ketoNumber, sugarNumber);
+    public Mojo(String createDate, float ketoNumber, float glucoseNumber, float weight) {
+        this(createDate, ketoNumber, glucoseNumber);
         mWeight = weight;
     }
 
@@ -55,12 +53,12 @@ public class Mojo implements Serializable {
         mKetoNumber = ketoNumber;
     }
 
-    public float getSugarNumber() {
-        return mSugarNumber;
+    public float getGlucoseNumber() {
+        return mGlucoseNumber;
     }
 
-    public void setSugarNumber(float sugarNumber) {
-        mSugarNumber = sugarNumber;
+    public void setGlucoseNumber(float glucoseNumber) {
+        mGlucoseNumber = glucoseNumber;
     }
 
     public float getWeight() {
