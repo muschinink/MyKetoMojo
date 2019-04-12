@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.text.ParseException;
@@ -24,7 +26,7 @@ import static com.redkant.mymojo.MainActivity.ADD_MOJO_REQUEST;
 import static com.redkant.mymojo.MainActivity.DELETE_MOJO_REQUEST;
 import static com.redkant.mymojo.MainActivity.EDIT_MOJO_REQUEST;
 
-public class AddEditMojoActivity extends AppCompatActivity {
+public class AddEditMojoActivity extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener {
 
     int mID = 0;
     EditText etCreateDate;
@@ -33,11 +35,18 @@ public class AddEditMojoActivity extends AppCompatActivity {
     EditText etGlucose;
     EditText etWeight;
 
+    private TextView mTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_edit_mojo);
+
+        etCreateDate = (EditText)findViewById(R.id.etCreateDate);
+        etCreateTime = (EditText)findViewById(R.id.etCreateTime);
+        etKetone = (EditText) findViewById(R.id.etKetone);
+        etGlucose = (EditText) findViewById(R.id.etGlucose);
+        etWeight = (EditText) findViewById(R.id.etWeight);
 
         int requestCode = getIntent().getIntExtra("requestCode", 0);
 
@@ -52,24 +61,14 @@ public class AddEditMojoActivity extends AppCompatActivity {
 
             mID = getIntent().getIntExtra("ID", 0);
 
-            etCreateDate = (EditText)findViewById(R.id.etCreateDate);
             etCreateDate.setText(getIntent().getStringExtra("CREATE_DATE"));
-
-            etCreateTime = (EditText)findViewById(R.id.etCreateTime);
             etCreateTime.setText(getIntent().getStringExtra("CREATE_TIME"));
-
-            etKetone = (EditText) findViewById(R.id.etKetone);
             etKetone.setText(getIntent().getStringExtra("KETONE"));
-
-            etGlucose = (EditText) findViewById(R.id.etGlucose);
             etGlucose.setText(getIntent().getStringExtra("GLUCOSE"));
-
-            etWeight = (EditText) findViewById(R.id.etWeight);
             etWeight.setText(getIntent().getStringExtra("WEIGHT"));
         }
 
         if (requestCode == ADD_MOJO_REQUEST) {
-            etCreateDate = (EditText) findViewById(R.id.etCreateDate);
             etCreateDate.setText((new SimpleDateFormat("dd.MM.yyyy")).format(new Date()));
             etCreateDate.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -79,7 +78,6 @@ public class AddEditMojoActivity extends AppCompatActivity {
                 }
             });
 
-            etCreateTime = (EditText) findViewById(R.id.etCreateTime);
             etCreateTime.setText((new SimpleDateFormat("HH:mm")).format(new Date()));
             etCreateTime.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -88,8 +86,32 @@ public class AddEditMojoActivity extends AppCompatActivity {
                     dFragment.show(getSupportFragmentManager(), "Time Picker");
                 }
             });
+
+            etKetone.setText("0");
+            etGlucose.setText("0");
+            etWeight.setText("0");
         }
 
+        final SeekBar ketoneSeekBar = (SeekBar)findViewById(R.id.sbKetone);
+        ketoneSeekBar.setProgress((int)(Float.valueOf(etKetone.getText().toString())*10));
+        ketoneSeekBar.setOnSeekBarChangeListener(this);
+
+
+    }
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        float f = progress / 10f;
+        etKetone.setText(String.valueOf(f));
+
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
     }
 
     public void bOKAddEditMojoClick(View view) {
