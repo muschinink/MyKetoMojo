@@ -2,15 +2,15 @@ package com.redkant.mymojo;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.redkant.mymojo.db.Mojo;
 
@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import static com.redkant.mymojo.MainActivity.DELETE_MOJO_REQUEST;
 import static com.redkant.mymojo.MainActivity.EDIT_MOJO_REQUEST;
 
 public class MojoAdapter extends RecyclerView.Adapter<MojoAdapter.ViewHolder> {
@@ -35,6 +36,8 @@ public class MojoAdapter extends RecyclerView.Adapter<MojoAdapter.ViewHolder> {
         public TextView tvSugarNumber;
         public TextView tvGKI;
 
+        public CardView cvMojoRow;
+
         public ViewHolder(View v) {
             super(v);
 
@@ -42,6 +45,8 @@ public class MojoAdapter extends RecyclerView.Adapter<MojoAdapter.ViewHolder> {
             tvKetoNumber = v.findViewById(R.id.tvKetoNumber);
             tvSugarNumber = v.findViewById(R.id.tvSugarNumber);
             tvGKI = v.findViewById(R.id.tvGKI);
+
+            cvMojoRow = v.findViewById(R.id.cvMojoRow);
         }
 
         public void bind(final Mojo item) {
@@ -80,10 +85,51 @@ public class MojoAdapter extends RecyclerView.Adapter<MojoAdapter.ViewHolder> {
 
         holder.bind(mDataset.get(position));
 
-        holder.tvCreateDate.setOnClickListener(new View.OnClickListener() {
+        holder.cvMojoRow.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                AlertDialog.Builder ad = new AlertDialog.Builder(context);
+                ad.setTitle("Предупреждение");
+                ad.setMessage("Вы действительно хотите удалить запись?");
+
+                ad.setPositiveButton("Да", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+/*
+                        MojoDatabaseHelper db = new MojoDatabaseHelper(context);
+                        Mojo mojo = new Mojo();
+                        mojo.setID(mDataset.get(pos).getID());
+                        db.deleteMojo(mojo);
+*/
+                        Intent intent = new Intent(context, AddEditMojoActivity.class);
+                        intent.putExtra("requestCode", DELETE_MOJO_REQUEST);
+                        intent.putExtra("ID", mDataset.get(pos).getID());
+
+                        ((Activity) context).startActivityForResult(intent, DELETE_MOJO_REQUEST);
+
+
+                    }
+                });
+
+                ad.setNegativeButton("Нет", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+
+                // разрешаем нажатие кнопки Back
+                ad.setCancelable(true);
+
+                ad.show();
+
+                // дальше отклик не посылаем
+                return true;
+            }
+        });
+
+        holder.cvMojoRow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(context, AddEditMojoActivity.class);
                 intent.putExtra("requestCode", EDIT_MOJO_REQUEST);
                 intent.putExtra("ID", mDataset.get(pos).getID());

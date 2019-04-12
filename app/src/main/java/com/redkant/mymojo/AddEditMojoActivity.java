@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import static com.redkant.mymojo.MainActivity.ADD_MOJO_REQUEST;
+import static com.redkant.mymojo.MainActivity.DELETE_MOJO_REQUEST;
 import static com.redkant.mymojo.MainActivity.EDIT_MOJO_REQUEST;
 
 public class AddEditMojoActivity extends AppCompatActivity {
@@ -39,6 +40,13 @@ public class AddEditMojoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_edit_mojo);
 
         int requestCode = getIntent().getIntExtra("requestCode", 0);
+
+        if (requestCode == DELETE_MOJO_REQUEST) {
+            Intent answerIntent = new Intent();
+            answerIntent.putExtra("ID", getIntent().getIntExtra("ID", 0));
+            setResult(RESULT_OK, answerIntent);
+            finish();
+        }
 
         if (requestCode == EDIT_MOJO_REQUEST) {
 

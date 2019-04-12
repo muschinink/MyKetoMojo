@@ -89,8 +89,8 @@ public class MojoDatabaseHelper extends SQLiteOpenHelper {
         return mojo;
     }
 
-    public List<Mojo> getAllMojo() {
-        List<Mojo> mogoList = new ArrayList<Mojo>();
+    public void getAllMojo(List<Mojo> list) {
+        list.clear();
 
         String selectQuery = "SELECT " + COLUMN_ID +
                 ", " + COLUMN_CREATE_DATE +
@@ -121,11 +121,48 @@ public class MojoDatabaseHelper extends SQLiteOpenHelper {
                 mojo.setGlucoseNumber(Float.parseFloat(cursor.getString(3)));
                 mojo.setWeight(Float.parseFloat(cursor.getString(4)));
 
-                mogoList.add(mojo);
+                list.add(mojo);
+            } while (cursor.moveToNext());
+        }
+    }
+
+    public List<Mojo> getAllMojo() {
+        List<Mojo> mojoList = new ArrayList<Mojo>();
+
+        String selectQuery = "SELECT " + COLUMN_ID +
+                ", " + COLUMN_CREATE_DATE +
+                ", " + COLUMN_KETO_NUMBER +
+                ", " + COLUMN_SUGAR_NUMBER +
+                ", " + COLUMN_WEIGHT + " FROM " + TABLE_MOJO +
+                " ORDER BY " + COLUMN_CREATE_DATE + " DESC ";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                Mojo mojo = new Mojo();
+                mojo.setID(Integer.parseInt(cursor.getString(0)));
+
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.sss", Locale.ENGLISH);
+                try {
+                    Date d = df.parse(cursor.getString(1));
+                    df.applyPattern("dd.MM.yyyy HH:mm");
+                    mojo.setCreateDate(df.format(d));
+                } catch (ParseException e) {
+                    Log.i("***", cursor.getString(1));
+                }
+
+                mojo.setKetoNumber(Float.parseFloat(cursor.getString(2)));
+                mojo.setGlucoseNumber(Float.parseFloat(cursor.getString(3)));
+                mojo.setWeight(Float.parseFloat(cursor.getString(4)));
+
+                mojoList.add(mojo);
             } while (cursor.moveToNext());
         }
 
-        return mogoList;
+        return mojoList;
     }
 
     public int getMojoCount() {
@@ -165,13 +202,14 @@ public class MojoDatabaseHelper extends SQLiteOpenHelper {
                 new String[]{String.valueOf(mojo.getID())});
     }
 
-    public void deleteNote(Mojo mojo) {
+    public void deleteMojo(Mojo mojo) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_MOJO, COLUMN_ID + " = ?",
                 new String[] { String.valueOf(mojo.getID()) });
         db.close();
     }
 
+/*
     public void createDefaultMojoIfNeed()  {
         int count = this.getMojoCount();
 
@@ -183,5 +221,6 @@ public class MojoDatabaseHelper extends SQLiteOpenHelper {
             this.addMojo(note1);
         }
     }
+*/
 
 }
