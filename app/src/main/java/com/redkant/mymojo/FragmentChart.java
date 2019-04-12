@@ -5,15 +5,24 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
+import com.redkant.mymojo.db.Mojo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,56 +30,48 @@ import java.util.List;
 
 public class FragmentChart extends Fragment {
 
-    private LineChart mLineChart;
+    public BarChart mChart;
+    private View mViewFragment;
+
+    public void setData(List<Mojo> list) {
+        List<BarEntry> yVals = new ArrayList<>();
+
+        for (int i = list.size() - 1; i >= 0; i--) {
+            float gki = list.get(i).getGlucoseNumber()/18/list.get(i).getKetoNumber();
+            yVals.add(new BarEntry(list.size()-i, gki));
+        }
+
+        MojoBarDataSet dataSet = new MojoBarDataSet(yVals, "");
+
+        dataSet.setColors(new int[]{ContextCompat.getColor(getContext(), R.color.level_highest_therapeutic),
+                                    ContextCompat.getColor(getContext(), R.color.level_high_therapeutic),
+                                    ContextCompat.getColor(getContext(), R.color.level_moderate),
+                                    ContextCompat.getColor(getContext(), R.color.level_low),
+                                    ContextCompat.getColor(getContext(), R.color.level_not_in_ketosis)});
+
+        dataSet.setDrawValues(true);
+
+        BarData barData = new BarData(dataSet);
+
+        mChart.setData(barData);
+        mChart.invalidate();
+        mChart.animateY(500);
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.fragment_chart, null);
+        mViewFragment = inflater.inflate(R.layout.fragment_chart, null);
 
-        mLineChart = (LineChart)v.findViewById(R.id.chart);
+        mChart = (BarChart) mViewFragment.findViewById(R.id.chart);
 
-        ArrayList<String> xAXES = new ArrayList<>();
-        List<Entry> yAXESsin = new ArrayList<>();
-        List<Entry> yAXEScos = new ArrayList<>();
+        mChart.getDescription().setEnabled(false);
 
-        double x = 0;
-        int numDataPoints = 1000;
-
-        for (int i=0; i < numDataPoints; i++) {
-            float sinFunction = Float.parseFloat(String.valueOf(Math.sin(x)));
-            float cosFunction = Float.parseFloat(String.valueOf(Math.cos(x)));
-            x = x + 0.1;
-
-            yAXESsin.add(new Entry(i, sinFunction));
-            yAXEScos.add(new Entry(i, cosFunction));
-            xAXES.add(i, String.valueOf(x));
-        }
-
-        String[] xaxes = new String[xAXES.size()];
-
-        for (int i = 0; i < xAXES.size(); i++) {
-            xaxes[i] = xAXES.get(i);
-        }
-
-        LineDataSet lineDataSet1 = new LineDataSet(yAXEScos, "cos");
-        lineDataSet1.setColor(Color.BLUE);
-
-        LineDataSet lineDataSet2 = new LineDataSet(yAXESsin, "sin");
-        lineDataSet2.setColor(Color.RED);
-        List<ILineDataSet> lineDataSets = new ArrayList<>();
-        lineDataSets.add(lineDataSet1);
-        lineDataSets.add(lineDataSet2);
-
-        LineData lineData = new LineData(lineDataSets);
-        mLineChart.setData(lineData);
-
-        mLineChart.setVisibleXRangeMaximum(20f);
-        mLineChart.invalidate();
-
+        XAxis xAxis = mChart.getXAxis();
+        xAxis.setDrawLabels(false);
 
 //        return super.onCreateView(inflater, container, savedInstanceState);
-        return v;
+        return mViewFragment;
     }
 }

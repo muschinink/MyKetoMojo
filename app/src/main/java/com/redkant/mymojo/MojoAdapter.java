@@ -95,19 +95,11 @@ public class MojoAdapter extends RecyclerView.Adapter<MojoAdapter.ViewHolder> {
                 ad.setPositiveButton("Да", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-/*
-                        MojoDatabaseHelper db = new MojoDatabaseHelper(context);
-                        Mojo mojo = new Mojo();
-                        mojo.setID(mDataset.get(pos).getID());
-                        db.deleteMojo(mojo);
-*/
                         Intent intent = new Intent(context, AddEditMojoActivity.class);
                         intent.putExtra("requestCode", DELETE_MOJO_REQUEST);
                         intent.putExtra("ID", mDataset.get(pos).getID());
 
                         ((Activity) context).startActivityForResult(intent, DELETE_MOJO_REQUEST);
-
-
                     }
                 });
 

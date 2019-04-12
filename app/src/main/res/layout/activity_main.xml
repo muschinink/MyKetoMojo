@@ -19,7 +19,7 @@
         app:srcCompat="@android:drawable/ic_input_add" />
 
     <fragment
-        android:id="@+id/frChat"
+        android:id="@+id/frChart"
         android:name="com.redkant.mymojo.FragmentChart"
         android:layout_width="0dp"
         android:layout_height="220dp"
@@ -42,6 +42,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/frChat" />
+        app:layout_constraintTop_toBottomOf="@+id/frChart" />
 
 </android.support.constraint.ConstraintLayout>

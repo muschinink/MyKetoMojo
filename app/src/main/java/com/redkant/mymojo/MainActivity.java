@@ -27,14 +27,18 @@ public class MainActivity extends AppCompatActivity {
     private MojoDatabaseHelper db;
     public List<Mojo> listMojo;
 
+    private FragmentChart mChartFragment;
+
     public static final int ADD_MOJO_REQUEST = 1000;
     public static final int EDIT_MOJO_REQUEST = 1001;
     public static final int DELETE_MOJO_REQUEST = 1002;
 
+/*
     public void EditMojoRequest() {
         Intent intent = new Intent(MainActivity.this, AddEditMojoActivity.class);
         startActivityForResult(intent, EDIT_MOJO_REQUEST);
     }
+*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +64,10 @@ public class MainActivity extends AppCompatActivity {
         db.getAllMojo(listMojo);
         mMojoAdapter = new MojoAdapter(this, listMojo);
         mMojoRecyclerView.setAdapter(mMojoAdapter);
+
+        // fill chart
+        mChartFragment = (FragmentChart)getSupportFragmentManager().findFragmentById(R.id.frChart);
+        mChartFragment.setData(listMojo);
     }
 
     @Override
@@ -104,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
         db.getAllMojo(listMojo);
         mMojoAdapter.notifyDataSetChanged();
 
+        mChartFragment.setData(listMojo);
     }
 
 }
