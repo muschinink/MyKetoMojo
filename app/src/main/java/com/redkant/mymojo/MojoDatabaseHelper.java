@@ -82,7 +82,7 @@ public class MojoDatabaseHelper extends SQLiteOpenHelper {
         Mojo mojo = new Mojo(
                 cursor.getString(0),
                 cursor.getFloat(1),
-                cursor.getFloat(2),
+                cursor.getInt(2),
                 cursor.getFloat(3)
         );
 
@@ -118,7 +118,7 @@ public class MojoDatabaseHelper extends SQLiteOpenHelper {
                 }
 
                 mojo.setKetoNumber(Float.parseFloat(cursor.getString(2)));
-                mojo.setGlucoseNumber(Float.parseFloat(cursor.getString(3)));
+                mojo.setGlucoseNumber(Integer.parseInt(cursor.getString(3)));
                 mojo.setWeight(Float.parseFloat(cursor.getString(4)));
 
                 list.add(mojo);
@@ -155,7 +155,7 @@ public class MojoDatabaseHelper extends SQLiteOpenHelper {
                 }
 
                 mojo.setKetoNumber(Float.parseFloat(cursor.getString(2)));
-                mojo.setGlucoseNumber(Float.parseFloat(cursor.getString(3)));
+                mojo.setGlucoseNumber(Integer.parseInt(cursor.getString(3)));
                 mojo.setWeight(Float.parseFloat(cursor.getString(4)));
 
                 mojoList.add(mojo);

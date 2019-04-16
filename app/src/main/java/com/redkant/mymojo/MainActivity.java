@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
                 mojo.setCreateDate((new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.sss")).format(d));
 
                 mojo.setKetoNumber(Float.parseFloat(data.getStringExtra("KETONE")));
-                mojo.setGlucoseNumber(Float.parseFloat(data.getStringExtra("GLUCOSE")));
+                mojo.setGlucoseNumber(Integer.parseInt(data.getStringExtra("GLUCOSE")));
                 mojo.setWeight(Float.parseFloat(data.getStringExtra("WEIGHT")));
 
                 if (requestCode == EDIT_MOJO_REQUEST && mojo.getID() != 0) {

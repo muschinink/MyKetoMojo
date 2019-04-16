@@ -7,7 +7,7 @@ public class Mojo implements Serializable {
     private int mID;
     private String mCreateDate;
     private float mKetoNumber;
-    private float mGlucoseNumber;
+    private int mGlucoseNumber;
     private float mWeight;
 
     public Mojo() {
@@ -19,12 +19,12 @@ public class Mojo implements Serializable {
         mKetoNumber = ketoNumber;
     }
 
-    public Mojo(String createDate, float ketoNumber, float glucoseNumber) {
+    public Mojo(String createDate, float ketoNumber, int glucoseNumber) {
         this(createDate, ketoNumber);
         mGlucoseNumber = glucoseNumber;
     }
 
-    public Mojo(String createDate, float ketoNumber, float glucoseNumber, float weight) {
+    public Mojo(String createDate, float ketoNumber, int glucoseNumber, float weight) {
         this(createDate, ketoNumber, glucoseNumber);
         mWeight = weight;
     }
@@ -53,11 +53,11 @@ public class Mojo implements Serializable {
         mKetoNumber = ketoNumber;
     }
 
-    public float getGlucoseNumber() {
+    public int getGlucoseNumber() {
         return mGlucoseNumber;
     }
 
-    public void setGlucoseNumber(float glucoseNumber) {
+    public void setGlucoseNumber(int glucoseNumber) {
         mGlucoseNumber = glucoseNumber;
     }
 

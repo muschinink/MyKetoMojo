@@ -3,12 +3,12 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
-    <color name="glucoseColor">#7D5A5A</color>
+    <color name="glucose">#7D5A5A</color>
     <color name="gkiColor">#FF00AE</color>
     <color name="level_highest_therapeutic">#11ffff</color>
     <color name="level_high_therapeutic">#55ffff</color>
     <color name="level_moderate">#aaffff</color>
     <color name="level_low">#bbffff</color>
     <color name="level_not_in_ketosis">#ffffff</color>
-
+    <color name="ketone">@android:color/holo_blue_bright</color>
 </resources>

@@ -12,4 +12,7 @@
     <string name="bOK">OK</string>
     <string name="bCancel">Cancel</string>
     <string name="lCreateDate">Measuring date</string>
+    <string name="separator">.</string>
+    <string name="ketone_measure">mmol/L</string>
+    <string name="glucose_measure">mg/dL</string>
 </resources>

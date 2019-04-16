@@ -12,7 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.SeekBar;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -26,14 +26,17 @@ import static com.redkant.mymojo.MainActivity.ADD_MOJO_REQUEST;
 import static com.redkant.mymojo.MainActivity.DELETE_MOJO_REQUEST;
 import static com.redkant.mymojo.MainActivity.EDIT_MOJO_REQUEST;
 
-public class AddEditMojoActivity extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener {
+public class AddEditMojoActivity extends AppCompatActivity {
 
     int mID = 0;
     EditText etCreateDate;
     EditText etCreateTime;
-    EditText etKetone;
-    EditText etGlucose;
+//    EditText etGlucose;
     EditText etWeight;
+
+    NumberPicker mKetoneNumberPickerInt;
+    NumberPicker mKetoneNumberPickerFloat;
+    NumberPicker mGlucoseNumberPicker;
 
     private TextView mTextView;
 
@@ -44,9 +47,26 @@ public class AddEditMojoActivity extends AppCompatActivity implements SeekBar.On
 
         etCreateDate = (EditText)findViewById(R.id.etCreateDate);
         etCreateTime = (EditText)findViewById(R.id.etCreateTime);
-        etKetone = (EditText) findViewById(R.id.etKetone);
-        etGlucose = (EditText) findViewById(R.id.etGlucose);
+//        etGlucose = (EditText) findViewById(R.id.etGlucose);
         etWeight = (EditText) findViewById(R.id.etWeight);
+
+        mKetoneNumberPickerInt = (NumberPicker)findViewById(R.id.KetoneNumberPickerInt);
+        mKetoneNumberPickerInt.setMinValue(0);
+        mKetoneNumberPickerInt.setMaxValue(10);
+        mKetoneNumberPickerInt.setWrapSelectorWheel(false);
+        mKetoneNumberPickerInt.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+
+        mKetoneNumberPickerFloat = (NumberPicker)findViewById(R.id.KetoneNumberPickerFloat);
+        mKetoneNumberPickerFloat.setMinValue(0);
+        mKetoneNumberPickerFloat.setMaxValue(9);
+        mKetoneNumberPickerFloat.setWrapSelectorWheel(false);
+        mKetoneNumberPickerFloat.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+
+        mGlucoseNumberPicker = (NumberPicker)findViewById(R.id.GlucoseNumberPicker);
+        mGlucoseNumberPicker.setMinValue(0);
+        mGlucoseNumberPicker.setMaxValue(200);
+        mGlucoseNumberPicker.setWrapSelectorWheel(false);
+//        mGlucoseNumberPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 
         int requestCode = getIntent().getIntExtra("requestCode", 0);
 
@@ -63,8 +83,22 @@ public class AddEditMojoActivity extends AppCompatActivity implements SeekBar.On
 
             etCreateDate.setText(getIntent().getStringExtra("CREATE_DATE"));
             etCreateTime.setText(getIntent().getStringExtra("CREATE_TIME"));
-            etKetone.setText(getIntent().getStringExtra("KETONE"));
-            etGlucose.setText(getIntent().getStringExtra("GLUCOSE"));
+
+            String[] ket = getIntent().getStringExtra("KETONE").trim().split("\\.");
+
+            if (ket.length == 2) {
+                mKetoneNumberPickerInt.setValue(Integer.valueOf(ket[0]));
+                mKetoneNumberPickerFloat.setValue(Integer.valueOf(ket[1]));
+            }
+            else {
+                mKetoneNumberPickerInt.setValue(0);
+                mKetoneNumberPickerFloat.setValue(0);
+            }
+
+//            etGlucose.setText(getIntent().getStringExtra("GLUCOSE"));
+            mGlucoseNumberPicker.setValue(Integer.valueOf(getIntent().getStringExtra("GLUCOSE")));
+
+
             etWeight.setText(getIntent().getStringExtra("WEIGHT"));
         }
 
@@ -87,31 +121,11 @@ public class AddEditMojoActivity extends AppCompatActivity implements SeekBar.On
                 }
             });
 
-            etKetone.setText("0");
-            etGlucose.setText("0");
+//            etGlucose.setText("0");
+            mGlucoseNumberPicker.setValue(50);
             etWeight.setText("0");
         }
 
-        final SeekBar ketoneSeekBar = (SeekBar)findViewById(R.id.sbKetone);
-        ketoneSeekBar.setProgress((int)(Float.valueOf(etKetone.getText().toString())*10));
-        ketoneSeekBar.setOnSeekBarChangeListener(this);
-
-
-    }
-
-    @Override
-    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        float f = progress / 10f;
-        etKetone.setText(String.valueOf(f));
-
-    }
-
-    @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {
-    }
-
-    @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {
     }
 
     public void bOKAddEditMojoClick(View view) {
@@ -120,8 +134,9 @@ public class AddEditMojoActivity extends AppCompatActivity implements SeekBar.On
         answerIntent.putExtra("ID", mID);
         answerIntent.putExtra("CREATE_DATE", ((EditText)findViewById(R.id.etCreateDate)).getText().toString());
         answerIntent.putExtra("CREATE_TIME", ((EditText)findViewById(R.id.etCreateTime)).getText().toString());
-        answerIntent.putExtra("KETONE", ((EditText)findViewById(R.id.etKetone)).getText().toString());
-        answerIntent.putExtra("GLUCOSE", ((EditText)findViewById(R.id.etGlucose)).getText().toString());
+        answerIntent.putExtra("KETONE", String.valueOf(mKetoneNumberPickerInt.getValue()) + "." + mKetoneNumberPickerFloat.getValue());
+//        answerIntent.putExtra("GLUCOSE", ((EditText)findViewById(R.id.etGlucose)).getText().toString());
+        answerIntent.putExtra("GLUCOSE", String.valueOf(mGlucoseNumberPicker.getValue()));
         answerIntent.putExtra("WEIGHT", ((EditText)findViewById(R.id.etWeight)).getText().toString());
 
         setResult(RESULT_OK, answerIntent);

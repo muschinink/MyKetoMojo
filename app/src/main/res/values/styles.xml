@@ -8,4 +8,11 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="KetoneNumberPickerTheme" parent="AppTheme">
+        <item name="colorControlNormal">@color/ketone</item>
+    </style>
+
+    <style name="GlucoseNumberPickerTheme" parent="AppTheme">
+        <item name="colorControlNormal">@color/glucose</item>
+    </style>
 </resources>
