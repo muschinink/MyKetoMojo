@@ -31,12 +31,12 @@ public class AddEditMojoActivity extends AppCompatActivity {
     int mID = 0;
     EditText etCreateDate;
     EditText etCreateTime;
-//    EditText etGlucose;
-    EditText etWeight;
 
     NumberPicker mKetoneNumberPickerInt;
     NumberPicker mKetoneNumberPickerFloat;
     NumberPicker mGlucoseNumberPicker;
+    NumberPicker mWeightKgNumberPicker;
+    NumberPicker mWeightGramNumberPicker;
 
     private TextView mTextView;
 
@@ -46,9 +46,22 @@ public class AddEditMojoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_edit_mojo);
 
         etCreateDate = (EditText)findViewById(R.id.etCreateDate);
+        etCreateDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment dFragment = new DatePickerFragment();
+                dFragment.show(getSupportFragmentManager(), "Date Picker");
+            }
+        });
+
         etCreateTime = (EditText)findViewById(R.id.etCreateTime);
-//        etGlucose = (EditText) findViewById(R.id.etGlucose);
-        etWeight = (EditText) findViewById(R.id.etWeight);
+        etCreateTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment dFragment = new TimePickerFragment();
+                dFragment.show(getSupportFragmentManager(), "Time Picker");
+            }
+        });
 
         mKetoneNumberPickerInt = (NumberPicker)findViewById(R.id.KetoneNumberPickerInt);
         mKetoneNumberPickerInt.setMinValue(0);
@@ -66,7 +79,17 @@ public class AddEditMojoActivity extends AppCompatActivity {
         mGlucoseNumberPicker.setMinValue(0);
         mGlucoseNumberPicker.setMaxValue(200);
         mGlucoseNumberPicker.setWrapSelectorWheel(false);
-//        mGlucoseNumberPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+
+        mWeightKgNumberPicker = (NumberPicker)findViewById(R.id.WeightKgNumberPicker);
+        mWeightKgNumberPicker.setMinValue(0);
+        mWeightKgNumberPicker.setMaxValue(200);
+        mWeightKgNumberPicker.setWrapSelectorWheel(false);
+
+        mWeightGramNumberPicker = (NumberPicker)findViewById(R.id.WeightGramNumberPicker);
+        mWeightGramNumberPicker.setMinValue(0);
+        mWeightGramNumberPicker.setMaxValue(9);
+        mWeightGramNumberPicker.setWrapSelectorWheel(false);
+        mWeightGramNumberPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 
         int requestCode = getIntent().getIntExtra("requestCode", 0);
 
@@ -95,35 +118,26 @@ public class AddEditMojoActivity extends AppCompatActivity {
                 mKetoneNumberPickerFloat.setValue(0);
             }
 
-//            etGlucose.setText(getIntent().getStringExtra("GLUCOSE"));
             mGlucoseNumberPicker.setValue(Integer.valueOf(getIntent().getStringExtra("GLUCOSE")));
 
+            String[] weight = getIntent().getStringExtra("WEIGHT").trim().split("\\.");
 
-            etWeight.setText(getIntent().getStringExtra("WEIGHT"));
+            if (weight.length == 2) {
+                mWeightKgNumberPicker.setValue(Integer.valueOf(weight[0]));
+                mWeightGramNumberPicker.setValue(Integer.valueOf(weight[1]));
+            }
+            else {
+                mWeightKgNumberPicker.setValue(0);
+                mWeightGramNumberPicker.setValue(0);
+            }
         }
 
         if (requestCode == ADD_MOJO_REQUEST) {
             etCreateDate.setText((new SimpleDateFormat("dd.MM.yyyy")).format(new Date()));
-            etCreateDate.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    DialogFragment dFragment = new DatePickerFragment();
-                    dFragment.show(getSupportFragmentManager(), "Date Picker");
-                }
-            });
-
             etCreateTime.setText((new SimpleDateFormat("HH:mm")).format(new Date()));
-            etCreateTime.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    DialogFragment dFragment = new TimePickerFragment();
-                    dFragment.show(getSupportFragmentManager(), "Time Picker");
-                }
-            });
-
-//            etGlucose.setText("0");
-            mGlucoseNumberPicker.setValue(50);
-            etWeight.setText("0");
+            mGlucoseNumberPicker.setValue(75);
+            mWeightKgNumberPicker.setValue(75);
+            mWeightGramNumberPicker.setValue(0);
         }
 
     }
@@ -135,9 +149,8 @@ public class AddEditMojoActivity extends AppCompatActivity {
         answerIntent.putExtra("CREATE_DATE", ((EditText)findViewById(R.id.etCreateDate)).getText().toString());
         answerIntent.putExtra("CREATE_TIME", ((EditText)findViewById(R.id.etCreateTime)).getText().toString());
         answerIntent.putExtra("KETONE", String.valueOf(mKetoneNumberPickerInt.getValue()) + "." + mKetoneNumberPickerFloat.getValue());
-//        answerIntent.putExtra("GLUCOSE", ((EditText)findViewById(R.id.etGlucose)).getText().toString());
         answerIntent.putExtra("GLUCOSE", String.valueOf(mGlucoseNumberPicker.getValue()));
-        answerIntent.putExtra("WEIGHT", ((EditText)findViewById(R.id.etWeight)).getText().toString());
+        answerIntent.putExtra("WEIGHT", String.valueOf(mWeightKgNumberPicker.getValue()) + "." + mWeightGramNumberPicker.getValue());
 
         setResult(RESULT_OK, answerIntent);
         finish();

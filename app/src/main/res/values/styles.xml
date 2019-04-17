@@ -10,9 +10,11 @@
 
     <style name="KetoneNumberPickerTheme" parent="AppTheme">
         <item name="colorControlNormal">@color/ketone</item>
+        <item name="android:textColorPrimary">@color/ketone</item>
     </style>
 
     <style name="GlucoseNumberPickerTheme" parent="AppTheme">
         <item name="colorControlNormal">@color/glucose</item>
+        <item name="android:textColorPrimary">@color/glucose</item>
     </style>
 </resources>

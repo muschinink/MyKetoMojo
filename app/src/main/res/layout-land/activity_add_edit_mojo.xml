@@ -63,12 +63,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="8dp"
         android:text="@string/lGlucose"
         android:textColor="@color/glucose"
         android:textSize="18sp"
-        app:layout_constraintEnd_toStartOf="@+id/tvWeight"
-        app:layout_constraintHorizontal_bias="0.457"
         app:layout_constraintStart_toEndOf="@+id/tvKetone"
         app:layout_constraintTop_toTopOf="@+id/tvKetone" />
 
@@ -76,11 +73,11 @@
         android:id="@+id/tvWeight"
         android:layout_width="99dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
         android:gravity="center_horizontal"
         android:text="@string/lWeight"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvGlucose"
         app:layout_constraintTop_toTopOf="@+id/tvKetone" />
 
     <EditText
@@ -123,7 +120,7 @@
     <NumberPicker
         android:id="@+id/KetoneNumberPickerInt"
         android:layout_width="46dp"
-        android:layout_height="wrap_content"
+        android:layout_height="126dp"
         android:layout_marginTop="8dp"
         android:theme="@style/KetoneNumberPickerTheme"
         app:layout_constraintStart_toStartOf="@+id/tvKetone"
@@ -132,7 +129,7 @@
     <NumberPicker
         android:id="@+id/KetoneNumberPickerFloat"
         android:layout_width="46dp"
-        android:layout_height="wrap_content"
+        android:layout_height="126dp"
         android:layout_marginStart="2dp"
         android:theme="@style/KetoneNumberPickerTheme"
         app:layout_constraintStart_toEndOf="@+id/tvKetoneSeparate"
@@ -141,31 +138,29 @@
     <NumberPicker
         android:id="@+id/GlucoseNumberPicker"
         android:layout_width="46dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_height="126dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:theme="@style/GlucoseNumberPickerTheme"
-        app:layout_constraintEnd_toStartOf="@+id/WeightKgNumberPicker"
         app:layout_constraintStart_toEndOf="@+id/KetoneNumberPickerFloat"
         app:layout_constraintTop_toBottomOf="@+id/tvGlucose" />
 
     <NumberPicker
         android:id="@+id/WeightKgNumberPicker"
         android:layout_width="46dp"
-        android:layout_height="wrap_content"
+        android:layout_height="126dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/WeightGramNumberPicker"
+        app:layout_constraintStart_toEndOf="@+id/GlucoseNumberPicker"
         app:layout_constraintTop_toBottomOf="@+id/tvWeight" />
 
     <NumberPicker
         android:id="@+id/WeightGramNumberPicker"
         android:layout_width="46dp"
-        android:layout_height="wrap_content"
+        android:layout_height="126dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tvWeightSeparate"
         app:layout_constraintTop_toBottomOf="@+id/tvWeight" />
 
     <TextView

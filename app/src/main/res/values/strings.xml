@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MyMojo</string>
+    <string name="app_name">MyKetoMojo</string>
     <string name="lKetoNumber">K</string>
     <string name="lGlucoseNumber">G</string>
     <string name="lKetone">Ketone</string>
@@ -15,4 +15,6 @@
     <string name="separator">.</string>
     <string name="ketone_measure">mmol/L</string>
     <string name="glucose_measure">mg/dL</string>
+    <string name="weight_unit_1">kg</string>
+    <string name="weight_unit_2">gram</string>
 </resources>
