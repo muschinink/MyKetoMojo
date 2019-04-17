@@ -17,4 +17,7 @@
     <string name="glucose_measure">mg/dL</string>
     <string name="weight_unit_1">kg</string>
     <string name="weight_unit_2">gram</string>
+
+    <string name="action_search">Search</string>
+
 </resources>

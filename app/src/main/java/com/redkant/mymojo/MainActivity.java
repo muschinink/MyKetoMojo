@@ -1,14 +1,23 @@
 package com.redkant.mymojo;
 
 import android.content.Intent;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.redkant.mymojo.db.Mojo;
 
@@ -33,17 +42,15 @@ public class MainActivity extends AppCompatActivity {
     public static final int EDIT_MOJO_REQUEST = 1001;
     public static final int DELETE_MOJO_REQUEST = 1002;
 
-/*
-    public void EditMojoRequest() {
-        Intent intent = new Intent(MainActivity.this, AddEditMojoActivity.class);
-        startActivityForResult(intent, EDIT_MOJO_REQUEST);
-    }
-*/
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -55,19 +62,32 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        listMojo = new ArrayList<>();
         db = new MojoDatabaseHelper(this);
+        db.getAllMojo(listMojo);
+        mMojoAdapter = new MojoAdapter(this, listMojo);
 
         mMojoRecyclerView = findViewById(R.id.rvMojo);
         mMojoRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        listMojo = new ArrayList<>();
-        db.getAllMojo(listMojo);
-        mMojoAdapter = new MojoAdapter(this, listMojo);
         mMojoRecyclerView.setAdapter(mMojoAdapter);
 
-        // fill chart
         mChartFragment = (FragmentChart)getSupportFragmentManager().findFragmentById(R.id.frChart);
         mChartFragment.setData(listMojo);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_search) {
+            Toast.makeText(this, "search", Toast.LENGTH_SHORT).show();
+        }
+
+        return true;
     }
 
     @Override
