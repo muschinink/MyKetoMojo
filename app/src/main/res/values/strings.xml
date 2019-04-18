@@ -22,8 +22,11 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_title">My Keto Mojo</string>
+    <string name="nav_header_subtitle">You control your life</string>
     <string name="nav_header_desc">Navigation header</string>
+    <string name="nav_export">Export</string>
+    <string name="nav_import">Import</string>
+    <string name="nav_db_section">DB</string>
 
 </resources>

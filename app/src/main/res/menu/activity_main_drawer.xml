@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
+<!--
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_camera"
@@ -21,17 +22,18 @@
             android:icon="@drawable/ic_menu_manage"
             android:title="Tools" />
     </group>
+-->
 
-    <item android:title="Communicate">
+    <item android:title="@string/nav_db_section">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:id="@+id/nav_import"
+                android:icon="@drawable/ic_import_24px"
+                android:title="@string/nav_import" />
             <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:id="@+id/nav_export"
+                android:icon="@drawable/ic_export_24px"
+                android:title="@string/nav_export" />
         </menu>
     </item>
 
