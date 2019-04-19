@@ -1,23 +1,33 @@
 package com.redkant.mymojo;
 
+import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.ajts.androidmads.sqliteimpex.SQLiteImporterExporter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -25,9 +35,12 @@ import android.widget.Toast;
 import com.google.android.material.navigation.NavigationView;
 import com.redkant.mymojo.db.Mojo;
 
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -35,7 +48,6 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private RecyclerView mMojoRecyclerView;
     public RecyclerView.Adapter mMojoAdapter;
 
     private MojoDatabaseHelper db;
@@ -47,23 +59,29 @@ public class MainActivity extends AppCompatActivity
     public static final int EDIT_MOJO_REQUEST = 1001;
     public static final int DELETE_MOJO_REQUEST = 1002;
 
-    private Toolbar mToolbar;
+    private static final int PERMISSION_REQUEST_CODE = 1010;
+
+    SQLiteImporterExporter mSQLiteImporterExporter;
+//    String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/";
+    public static String db_ = "mojo_db";
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -78,20 +96,55 @@ public class MainActivity extends AppCompatActivity
 
         listMojo = new ArrayList<>();
         db = new MojoDatabaseHelper(this);
-        db.getAllMojo(listMojo);
+//        db.getAllMojo(listMojo);
+
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.DAY_OF_MONTH, -7);
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.sss", Locale.ENGLISH);
+        db.getFilteredMojo(listMojo, "create_date >= '" + df.format(c.getTime()) + "'");
+
         mMojoAdapter = new MojoAdapter(this, listMojo);
 
-        mMojoRecyclerView = findViewById(R.id.rvMojo);
-        mMojoRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mMojoRecyclerView.setAdapter(mMojoAdapter);
+        RecyclerView recyclerView = findViewById(R.id.rvMojo);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(mMojoAdapter);
 
         mChartFragment = (FragmentChart)getSupportFragmentManager().findFragmentById(R.id.frChart);
-        mChartFragment.setData(listMojo);
+        if (mChartFragment != null) {
+            mChartFragment.setData(listMojo);
+        }
+
+        mSQLiteImporterExporter = new SQLiteImporterExporter(getApplicationContext(), db_);
+        mSQLiteImporterExporter.setOnImportListener(new SQLiteImporterExporter.ImportListener() {
+            @Override
+            public void onSuccess(String message) {
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                Log.i("***", "onSuccess: " + message);
+            }
+
+            @Override
+            public void onFailure(Exception exception) {
+                Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.i("***", "onFailure: " + exception.getMessage());
+            }
+        });
+        mSQLiteImporterExporter.setOnExportListener(new SQLiteImporterExporter.ExportListener() {
+            @Override
+            public void onSuccess(String message) {
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Exception exception) {
+                Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -101,7 +154,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
+//        getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
 
@@ -116,19 +169,115 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_import) {
-            Toast.makeText(this, "import pressed", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_export) {
-            Toast.makeText(this, "export pressed", Toast.LENGTH_SHORT).show();
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.nav_settings:
+                Toast.makeText(this, "settings click", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.nav_import:
+                navImportClick();
+                break;
+            case R.id.nav_export:
+                navExportClick();
+                break;
+            default:
+                break;
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void navExportClick() {
+        AlertDialog.Builder ad = new AlertDialog.Builder(this);
+        ad.setTitle(R.string.warning_title);
+        ad.setMessage(R.string.warning_export_db);
+
+        ad.setPositiveButton(R.string.btn_yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // check permissions
+                if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        == PackageManager.PERMISSION_GRANTED) {
+
+                    String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + "/";
+                    File directory = new File(path);
+
+                    boolean fMakeDir = true;
+
+                    if (!directory.exists()) {
+                        fMakeDir = directory.mkdir();
+                    }
+
+                    if (fMakeDir && mSQLiteImporterExporter.isDataBaseExists()) {
+                        try {
+                            mSQLiteImporterExporter.exportDataBase(path);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Toast.makeText(getApplicationContext(), "DB Doesn't Exists", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    ActivityCompat.requestPermissions(MainActivity.this,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            PERMISSION_REQUEST_CODE
+                    );
+                }
+            }
+        });
+
+        ad.setNegativeButton(R.string.btn_no, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        // разрешаем нажатие кнопки Back
+        ad.setCancelable(true);
+        ad.show();
+    }
+
+    private void navImportClick() {
+        AlertDialog.Builder ad = new AlertDialog.Builder(this);
+        ad.setTitle(R.string.warning_title);
+        ad.setMessage(R.string.warning_import_db);
+
+        ad.setPositiveButton(R.string.btn_yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // check permissions
+                if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        == PackageManager.PERMISSION_GRANTED) {
+
+                    String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + "/";
+
+                    try {
+                        mSQLiteImporterExporter.importDataBase(path);
+
+                        RefreshMojoDataSet();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    ActivityCompat.requestPermissions(MainActivity.this,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            PERMISSION_REQUEST_CODE
+                    );
+                }
+            }
+        });
+
+        ad.setNegativeButton(R.string.btn_no, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        // разрешаем нажатие кнопки Back
+        ad.setCancelable(true);
+        ad.show();
     }
 
     @Override
@@ -170,10 +319,12 @@ public class MainActivity extends AppCompatActivity
             db.deleteMojo(mojo);
         }
 
-        db.getAllMojo(listMojo);
-        mMojoAdapter.notifyDataSetChanged();
-
-        mChartFragment.setData(listMojo);
+        RefreshMojoDataSet();
     }
 
+    private void RefreshMojoDataSet() {
+        db.getAllMojo(listMojo);
+        mMojoAdapter.notifyDataSetChanged();
+        mChartFragment.setData(listMojo);
+    }
 }

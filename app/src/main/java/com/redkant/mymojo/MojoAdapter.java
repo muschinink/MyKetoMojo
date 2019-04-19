@@ -89,10 +89,10 @@ public class MojoAdapter extends RecyclerView.Adapter<MojoAdapter.ViewHolder> {
             @Override
             public boolean onLongClick(View v) {
                 AlertDialog.Builder ad = new AlertDialog.Builder(context);
-                ad.setTitle("Предупреждение");
-                ad.setMessage("Вы действительно хотите удалить запись?");
+                ad.setTitle(R.string.warning_title);
+                ad.setMessage(R.string.warning_delete_row);
 
-                ad.setPositiveButton("Да", new DialogInterface.OnClickListener() {
+                ad.setPositiveButton(R.string.btn_yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Intent intent = new Intent(context, AddEditMojoActivity.class);
@@ -103,7 +103,7 @@ public class MojoAdapter extends RecyclerView.Adapter<MojoAdapter.ViewHolder> {
                     }
                 });
 
-                ad.setNegativeButton("Нет", new DialogInterface.OnClickListener() {
+                ad.setNegativeButton(R.string.btn_no, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                     }

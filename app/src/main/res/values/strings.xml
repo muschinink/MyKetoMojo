@@ -1,22 +1,22 @@
 <resources>
-    <string name="app_name">MyKetoMojo</string>
+    <string name="app_name">My Keto Mojo</string>
     <string name="lKetoNumber">K</string>
     <string name="lGlucoseNumber">G</string>
     <string name="lKetone">Ketone</string>
     <string name="lGlucose">Glucose</string>
     <string name="lWeight">Weight</string>
     <string name="lGKI">GKI</string>
-    <string name="hintKetone">Kenote index - mmol/L</string>
-    <string name="hintGlucose">Glucose index - mg/dL</string>
-    <string name="hintWeight">Weight - kg</string>
-    <string name="bOK">OK</string>
-    <string name="bCancel">Cancel</string>
-    <string name="lCreateDate">Measuring date</string>
+    <!--<string name="hintKetone">Kenote index - mmol/L</string>-->
+    <!--<string name="hintGlucose">Glucose index - mg/dL</string>-->
+    <!--<string name="hintWeight">Weight - kg</string>-->
+    <string name="bOK">Ок</string>
+    <string name="bCancel">Отмена</string>
+    <string name="lCreateDate">Дата измерения</string>
     <string name="separator">.</string>
     <string name="ketone_measure">mmol/L</string>
     <string name="glucose_measure">mg/dL</string>
-    <string name="weight_unit_1">kg</string>
-    <string name="weight_unit_2">gram</string>
+    <string name="weight_unit">kg</string>
+    <!--<string name="weight_unit_2">gram</string>-->
 
     <string name="action_search">Search</string>
 
@@ -25,8 +25,16 @@
     <string name="nav_header_title">My Keto Mojo</string>
     <string name="nav_header_subtitle">You control your life</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="nav_export">Export</string>
-    <string name="nav_import">Import</string>
+    <string name="nav_settings">Настройки</string>
+    <string name="nav_export">Экспорт</string>
+    <string name="nav_import">Импорт</string>
     <string name="nav_db_section">DB</string>
+
+    <string name="btn_yes">Да</string>
+    <string name="btn_no">Нет</string>
+    <string name="warning_title">Предупреждение</string>
+    <string name="warning_delete_row">Вы действительно хотите удалить запись?</string>
+    <string name="warning_import_db">Вы действительно импортировать базу данных?</string>
+    <string name="warning_export_db">Вы действительно экспортировать базу данных?</string>
 
 </resources>
