@@ -14,6 +14,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
@@ -26,6 +27,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,7 +40,6 @@ import com.redkant.mymojo.db.Mojo;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -62,15 +63,16 @@ public class MainActivity extends AppCompatActivity
     private static final int PERMISSION_REQUEST_CODE = 1010;
 
     SQLiteImporterExporter mSQLiteImporterExporter;
-//    String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/";
     public static String db_ = "mojo_db";
 
-
+    SharedPreferences mPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -96,10 +98,9 @@ public class MainActivity extends AppCompatActivity
 
         listMojo = new ArrayList<>();
         db = new MojoDatabaseHelper(this);
-//        db.getAllMojo(listMojo);
 
         Calendar c = Calendar.getInstance();
-        c.add(Calendar.DAY_OF_MONTH, -7);
+        c.add(Calendar.DAY_OF_MONTH, Integer.parseInt("-" + mPreferences.getInt("DaysCount", 7)));
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.sss", Locale.ENGLISH);
         db.getFilteredMojo(listMojo, "create_date >= '" + df.format(c.getTime()) + "'");
 
@@ -143,6 +144,14 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onResume() {
+        RefreshMojoDataSet();
+
+
+        super.onResume();
+    }
+
+    @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -172,7 +181,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_settings:
-                Toast.makeText(this, "settings click", Toast.LENGTH_SHORT).show();
+                navSettingsClick();
                 break;
             case R.id.nav_import:
                 navImportClick();
@@ -187,6 +196,11 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void navSettingsClick() {
+        Intent i = new Intent(this, MojoPreferenceActivity.class);
+        startActivity(i);
     }
 
     private void navExportClick() {
@@ -297,7 +311,7 @@ public class MainActivity extends AppCompatActivity
             try {
                 SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.ENGLISH);
                 Date d = df.parse(data.getStringExtra("CREATE_DATE") + " " + data.getStringExtra("CREATE_TIME"));
-                mojo.setCreateDate((new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.sss")).format(d));
+                mojo.setCreateDate((new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.sss", Locale.ENGLISH)).format(d));
 
                 mojo.setKetoNumber(Float.parseFloat(data.getStringExtra("KETONE")));
                 mojo.setGlucoseNumber(Integer.parseInt(data.getStringExtra("GLUCOSE")));
@@ -323,8 +337,15 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void RefreshMojoDataSet() {
-        db.getAllMojo(listMojo);
+//        db.getAllMojo(listMojo);
+
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.DAY_OF_MONTH, Integer.parseInt("-" + mPreferences.getInt("DaysCount", 7)));
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.sss", Locale.ENGLISH);
+        db.getFilteredMojo(listMojo, "create_date >= '" + df.format(c.getTime()) + "'");
+
         mMojoAdapter.notifyDataSetChanged();
         mChartFragment.setData(listMojo);
+
     }
 }

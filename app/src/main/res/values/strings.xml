@@ -36,5 +36,6 @@
     <string name="warning_delete_row">Вы действительно хотите удалить запись?</string>
     <string name="warning_import_db">Вы действительно импортировать базу данных?</string>
     <string name="warning_export_db">Вы действительно экспортировать базу данных?</string>
+    <string name="pref_dayscount">За какое кол-во дней показывать показания</string>
 
 </resources>
