@@ -28,7 +28,7 @@ public class MojoDatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_CREATE_DATE ="CREATE_DATE";
     private static final String COLUMN_KETO_NUMBER ="KETO_NUMBER";
     private static final String COLUMN_SUGAR_NUMBER ="SUGAR_NUMBER";
-    private static final String COLUMN_WEIGHT ="WEIGHT";
+    private static final String COLUMN_NOTE ="NOTE";
 
     public MojoDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -37,10 +37,11 @@ public class MojoDatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String script = "CREATE TABLE " + TABLE_MOJO + "("
-                + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_CREATE_DATE + " STRING,"
+                + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + COLUMN_CREATE_DATE + " VARCHAR2(2000),"
                 + COLUMN_KETO_NUMBER + " FLOAT, "
                 + COLUMN_SUGAR_NUMBER + " FLOAT, "
-                + COLUMN_WEIGHT + " FLOAT "
+                + COLUMN_NOTE + " VARCHAR2(2000) "
                 + ")";
         db.execSQL(script);
     }
@@ -58,7 +59,7 @@ public class MojoDatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_CREATE_DATE, mojo.getCreateDate());
         values.put(COLUMN_KETO_NUMBER, mojo.getKetoNumber());
         values.put(COLUMN_SUGAR_NUMBER, mojo.getGlucoseNumber());
-        values.put(COLUMN_WEIGHT, mojo.getWeight());
+        values.put(COLUMN_NOTE, mojo.getNote());
 
         db.insert(TABLE_MOJO, null, values);
 
@@ -73,7 +74,7 @@ public class MojoDatabaseHelper extends SQLiteOpenHelper {
                                          COLUMN_CREATE_DATE,
                                          COLUMN_KETO_NUMBER,
                                          COLUMN_SUGAR_NUMBER,
-                                         COLUMN_WEIGHT
+                                         COLUMN_NOTE
                                  }, COLUMN_ID + "=?",
                 new String[] { String.valueOf(id) }, null, null, null, null);
         if (cursor != null)
@@ -83,7 +84,7 @@ public class MojoDatabaseHelper extends SQLiteOpenHelper {
                 cursor.getString(0),
                 cursor.getFloat(1),
                 cursor.getInt(2),
-                cursor.getFloat(3)
+                cursor.getString(3)
         );
 
         return mojo;
@@ -96,7 +97,7 @@ public class MojoDatabaseHelper extends SQLiteOpenHelper {
                 ", " + COLUMN_CREATE_DATE +
                 ", " + COLUMN_KETO_NUMBER +
                 ", " + COLUMN_SUGAR_NUMBER +
-                ", " + COLUMN_WEIGHT + " FROM " + TABLE_MOJO +
+                ", " + COLUMN_NOTE + " FROM " + TABLE_MOJO +
                 " ORDER BY " + COLUMN_CREATE_DATE + " DESC ";
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -119,7 +120,7 @@ public class MojoDatabaseHelper extends SQLiteOpenHelper {
 
                 mojo.setKetoNumber(Float.parseFloat(cursor.getString(2)));
                 mojo.setGlucoseNumber(Integer.parseInt(cursor.getString(3)));
-                mojo.setWeight(Float.parseFloat(cursor.getString(4)));
+                mojo.setNote(cursor.getString(4));
 
                 list.add(mojo);
             } while (cursor.moveToNext());
@@ -135,14 +136,13 @@ public class MojoDatabaseHelper extends SQLiteOpenHelper {
             where = "";
         }
 
-
         list.clear();
 
         String selectQuery = "SELECT " + COLUMN_ID +
                 ", " + COLUMN_CREATE_DATE +
                 ", " + COLUMN_KETO_NUMBER +
                 ", " + COLUMN_SUGAR_NUMBER +
-                ", " + COLUMN_WEIGHT + " FROM " + TABLE_MOJO +
+                ", " + COLUMN_NOTE + " FROM " + TABLE_MOJO +
                 " WHERE 1=1 " +
                 where +
                 " ORDER BY " + COLUMN_CREATE_DATE + " DESC ";
@@ -167,7 +167,7 @@ public class MojoDatabaseHelper extends SQLiteOpenHelper {
 
                 mojo.setKetoNumber(Float.parseFloat(cursor.getString(2)));
                 mojo.setGlucoseNumber(Integer.parseInt(cursor.getString(3)));
-                mojo.setWeight(Float.parseFloat(cursor.getString(4)));
+                mojo.setNote(cursor.getString(4));
 
                 list.add(mojo);
             } while (cursor.moveToNext());
@@ -181,7 +181,7 @@ public class MojoDatabaseHelper extends SQLiteOpenHelper {
                 ", " + COLUMN_CREATE_DATE +
                 ", " + COLUMN_KETO_NUMBER +
                 ", " + COLUMN_SUGAR_NUMBER +
-                ", " + COLUMN_WEIGHT + " FROM " + TABLE_MOJO +
+                ", " + COLUMN_NOTE + " FROM " + TABLE_MOJO +
                 " ORDER BY " + COLUMN_CREATE_DATE + " DESC ";
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -204,7 +204,7 @@ public class MojoDatabaseHelper extends SQLiteOpenHelper {
 
                 mojo.setKetoNumber(Float.parseFloat(cursor.getString(2)));
                 mojo.setGlucoseNumber(Integer.parseInt(cursor.getString(3)));
-                mojo.setWeight(Float.parseFloat(cursor.getString(4)));
+                mojo.setNote(cursor.getString(4));
 
                 mojoList.add(mojo);
             } while (cursor.moveToNext());
@@ -243,7 +243,7 @@ public class MojoDatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_CREATE_DATE, mojo.getCreateDate());
         values.put(COLUMN_KETO_NUMBER, mojo.getKetoNumber());
         values.put(COLUMN_SUGAR_NUMBER, mojo.getGlucoseNumber());
-        values.put(COLUMN_WEIGHT, mojo.getWeight());
+        values.put(COLUMN_NOTE, mojo.getNote());
 
         // updating row
         return db.update(TABLE_MOJO, values, COLUMN_ID + " = ?",

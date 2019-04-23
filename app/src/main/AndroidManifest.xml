@@ -12,7 +12,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".AddEditMojoActivity" />
+        <activity
+            android:name=".AddEditMojoActivity"
+            android:windowSoftInputMode="adjustPan"
+            />
         <activity android:name=".MojoPreferenceActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

@@ -7,16 +7,34 @@
     tools:context=".AddEditMojoActivity">
 
     <TextView
-        android:id="@+id/tvWeightSeparate"
+        android:id="@+id/tvNote2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:layout_marginTop="80dp"
-        android:text="@string/separator"
+        android:layout_marginStart="16dp"
+        android:text="@string/lNote"
         android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/WeightKgNumberPicker"
-        app:layout_constraintTop_toTopOf="@+id/WeightKgNumberPicker" />
+        app:layout_constraintStart_toEndOf="@+id/tvGlucose"
+        app:layout_constraintTop_toTopOf="@+id/tvGlucose" />
+
+    <EditText
+        android:id="@+id/etNote"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/edittext_border_color"
+        android:ems="10"
+        android:gravity="top"
+        android:inputType="textMultiLine"
+        android:maxLength="2000"
+        android:minLines="10"
+        android:scrollbars="vertical"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/GlucoseNumberPicker"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tvNote2"
+        app:layout_constraintTop_toBottomOf="@+id/tvNote2"
+        tools:text="@string/lNote" />
 
     <TextView
         android:id="@+id/tvMeasuringDate"
@@ -67,17 +85,6 @@
         android:textColor="@color/glucose"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/tvKetone"
-        app:layout_constraintTop_toTopOf="@+id/tvKetone" />
-
-    <TextView
-        android:id="@+id/tvWeight"
-        android:layout_width="99dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:gravity="center_horizontal"
-        android:text="@string/lWeight"
-        android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@+id/tvGlucose"
         app:layout_constraintTop_toTopOf="@+id/tvKetone" />
 
     <EditText
@@ -145,24 +152,6 @@
         app:layout_constraintStart_toEndOf="@+id/KetoneNumberPickerFloat"
         app:layout_constraintTop_toBottomOf="@+id/tvGlucose" />
 
-    <NumberPicker
-        android:id="@+id/WeightKgNumberPicker"
-        android:layout_width="46dp"
-        android:layout_height="126dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toEndOf="@+id/GlucoseNumberPicker"
-        app:layout_constraintTop_toBottomOf="@+id/tvWeight" />
-
-    <NumberPicker
-        android:id="@+id/WeightGramNumberPicker"
-        android:layout_width="46dp"
-        android:layout_height="126dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="@+id/tvWeightSeparate"
-        app:layout_constraintTop_toBottomOf="@+id/tvWeight" />
-
     <TextView
         android:id="@+id/tvKetoneSeparate"
         android:layout_width="wrap_content"
@@ -199,16 +188,5 @@
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="@+id/tvGlucose"
         app:layout_constraintTop_toBottomOf="@+id/GlucoseNumberPicker" />
-
-    <TextView
-        android:id="@+id/tvWeightUnit_1"
-        android:layout_width="99dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:gravity="center_horizontal"
-        android:text="@string/weight_unit"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="@+id/WeightKgNumberPicker"
-        app:layout_constraintTop_toBottomOf="@+id/WeightKgNumberPicker" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

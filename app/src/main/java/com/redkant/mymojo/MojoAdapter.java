@@ -137,7 +137,7 @@ public class MojoAdapter extends RecyclerView.Adapter<MojoAdapter.ViewHolder> {
                 intent.putExtra("CREATE_TIME", new SimpleDateFormat("HH:mm").format(d));
                 intent.putExtra("KETONE", String.valueOf(mDataset.get(pos).getKetoNumber()));
                 intent.putExtra("GLUCOSE", String.valueOf(mDataset.get(pos).getGlucoseNumber()));
-                intent.putExtra("WEIGHT", String.valueOf(mDataset.get(pos).getWeight()));
+                intent.putExtra("NOTE", String.valueOf(mDataset.get(pos).getNote()));
 
                 ((Activity) context).startActivityForResult(intent, EDIT_MOJO_REQUEST);
             }

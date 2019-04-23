@@ -4,6 +4,8 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -31,14 +34,10 @@ public class AddEditMojoActivity extends AppCompatActivity {
     int mID = 0;
     EditText etCreateDate;
     EditText etCreateTime;
-
     NumberPicker mKetoneNumberPickerInt;
     NumberPicker mKetoneNumberPickerFloat;
     NumberPicker mGlucoseNumberPicker;
-    NumberPicker mWeightKgNumberPicker;
-    NumberPicker mWeightGramNumberPicker;
-
-    private TextView mTextView;
+    EditText etNote;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,16 +79,7 @@ public class AddEditMojoActivity extends AppCompatActivity {
         mGlucoseNumberPicker.setMaxValue(200);
         mGlucoseNumberPicker.setWrapSelectorWheel(false);
 
-        mWeightKgNumberPicker = (NumberPicker)findViewById(R.id.WeightKgNumberPicker);
-        mWeightKgNumberPicker.setMinValue(0);
-        mWeightKgNumberPicker.setMaxValue(200);
-        mWeightKgNumberPicker.setWrapSelectorWheel(false);
-
-        mWeightGramNumberPicker = (NumberPicker)findViewById(R.id.WeightGramNumberPicker);
-        mWeightGramNumberPicker.setMinValue(0);
-        mWeightGramNumberPicker.setMaxValue(9);
-        mWeightGramNumberPicker.setWrapSelectorWheel(false);
-        mWeightGramNumberPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+        etNote = (EditText)findViewById(R.id.etNote);
 
         int requestCode = getIntent().getIntExtra("requestCode", 0);
 
@@ -120,29 +110,35 @@ public class AddEditMojoActivity extends AppCompatActivity {
 
             mGlucoseNumberPicker.setValue(Integer.valueOf(getIntent().getStringExtra("GLUCOSE")));
 
-            String[] weight = getIntent().getStringExtra("WEIGHT").trim().split("\\.");
-
-            if (weight.length == 2) {
-                mWeightKgNumberPicker.setValue(Integer.valueOf(weight[0]));
-                mWeightGramNumberPicker.setValue(Integer.valueOf(weight[1]));
-            }
-            else {
-                mWeightKgNumberPicker.setValue(0);
-                mWeightGramNumberPicker.setValue(0);
-            }
+            etNote.setText(getIntent().getStringExtra("NOTE"));
         }
 
         if (requestCode == ADD_MOJO_REQUEST) {
             etCreateDate.setText((new SimpleDateFormat("dd.MM.yyyy")).format(new Date()));
             etCreateTime.setText((new SimpleDateFormat("HH:mm")).format(new Date()));
             mGlucoseNumberPicker.setValue(75);
-            mWeightKgNumberPicker.setValue(75);
-            mWeightGramNumberPicker.setValue(0);
         }
 
+        if (savedInstanceState != null) {
+            mKetoneNumberPickerInt.setValue(savedInstanceState.getInt("KetoneInt"));
+            mKetoneNumberPickerFloat.setValue(savedInstanceState.getInt("KetoneFloat"));
+            mGlucoseNumberPicker.setValue(savedInstanceState.getInt("Glucose"));
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("KetoneInt", mKetoneNumberPickerInt.getValue());
+        outState.putInt("KetoneFloat", mKetoneNumberPickerFloat.getValue());
+        outState.putInt("Glucose", mGlucoseNumberPicker.getValue());
     }
 
     public void bOKAddEditMojoClick(View view) {
+        if (!checkValues()) {
+            return;
+        }
+
         Intent answerIntent = new Intent();
 
         answerIntent.putExtra("ID", mID);
@@ -150,10 +146,18 @@ public class AddEditMojoActivity extends AppCompatActivity {
         answerIntent.putExtra("CREATE_TIME", ((EditText)findViewById(R.id.etCreateTime)).getText().toString());
         answerIntent.putExtra("KETONE", String.valueOf(mKetoneNumberPickerInt.getValue()) + "." + mKetoneNumberPickerFloat.getValue());
         answerIntent.putExtra("GLUCOSE", String.valueOf(mGlucoseNumberPicker.getValue()));
-        answerIntent.putExtra("WEIGHT", String.valueOf(mWeightKgNumberPicker.getValue()) + "." + mWeightGramNumberPicker.getValue());
+        answerIntent.putExtra("NOTE", ((EditText)findViewById(R.id.etNote)).getText().toString());
 
         setResult(RESULT_OK, answerIntent);
         finish();
+    }
+
+    private boolean checkValues() {
+        if (mKetoneNumberPickerInt.getValue() == 0 && mKetoneNumberPickerFloat.getValue() == 0) {
+            Toast.makeText(this, "Индекс кетонов не может быть равен 0.0", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
     }
 
     public void bCancelAddEditMojoClick(View view) {

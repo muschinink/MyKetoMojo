@@ -7,18 +7,6 @@
     tools:context=".AddEditMojoActivity">
 
     <TextView
-        android:id="@+id/tvWeightSeparate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:layout_marginTop="80dp"
-        android:text="@string/separator"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/WeightKgNumberPicker"
-        app:layout_constraintTop_toTopOf="@+id/WeightKgNumberPicker" />
-
-    <TextView
         android:id="@+id/tvMeasuringDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -31,7 +19,7 @@
 
     <EditText
         android:id="@+id/etCreateDate"
-        android:layout_width="119dp"
+        android:layout_width="103dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -43,49 +31,11 @@
         android:textIsSelectable="true"
         app:layout_constraintStart_toEndOf="@+id/tvMeasuringDate"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="CreateDate" />
-
-    <TextView
-        android:id="@+id/tvKetone"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        android:gravity="center_horizontal"
-        android:text="@string/lKetone"
-        android:textColor="@color/ketone"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvMeasuringDate" />
-
-    <TextView
-        android:id="@+id/tvGlucose"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="8dp"
-        android:text="@string/lGlucose"
-        android:textColor="@color/glucose"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toStartOf="@+id/tvWeight"
-        app:layout_constraintHorizontal_bias="0.457"
-        app:layout_constraintStart_toEndOf="@+id/tvKetone"
-        app:layout_constraintTop_toTopOf="@+id/tvKetone" />
-
-    <TextView
-        android:id="@+id/tvWeight"
-        android:layout_width="99dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:gravity="center_horizontal"
-        android:text="@string/lWeight"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tvKetone" />
+        tools:text="01.01.1900" />
 
     <EditText
         android:id="@+id/etCreateTime"
-        android:layout_width="82dp"
+        android:layout_width="56dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:cursorVisible="false"
@@ -96,12 +46,138 @@
         android:textIsSelectable="true"
         app:layout_constraintStart_toEndOf="@+id/etCreateDate"
         app:layout_constraintTop_toTopOf="@+id/etCreateDate"
-        tools:text="Time" />
+        tools:text="23:59" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="@+id/etCreateDate"
+        app:layout_constraintTop_toBottomOf="@+id/tvMeasuringDate">
+
+        <TextView
+            android:id="@+id/tvKetone"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center_horizontal"
+            android:text="@string/lKetone"
+            android:textColor="@color/ketone"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <NumberPicker
+            android:id="@+id/KetoneNumberPickerInt"
+            android:layout_width="46dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:theme="@style/KetoneNumberPickerTheme"
+            app:layout_constraintStart_toStartOf="@+id/tvKetone"
+            app:layout_constraintTop_toBottomOf="@+id/tvKetone" />
+
+        <TextView
+            android:id="@+id/tvKetoneSeparate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="80dp"
+            android:text="@string/separator"
+            android:textColor="@color/ketone"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/KetoneNumberPickerInt"
+            app:layout_constraintTop_toTopOf="@+id/KetoneNumberPickerInt" />
+
+        <NumberPicker
+            android:id="@+id/KetoneNumberPickerFloat"
+            android:layout_width="46dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:theme="@style/KetoneNumberPickerTheme"
+            app:layout_constraintEnd_toEndOf="@+id/tvKetone"
+            app:layout_constraintTop_toBottomOf="@+id/tvKetone" />
+
+        <TextView
+            android:id="@+id/tvKetoneUnit"
+            android:layout_width="101dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center_horizontal"
+            android:text="@string/ketone_measure"
+            android:textColor="@color/ketone"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="@+id/tvKetone"
+            app:layout_constraintTop_toBottomOf="@+id/KetoneNumberPickerInt" />
+
+        <TextView
+            android:id="@+id/tvGlucose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/lGlucose"
+            android:textColor="@color/glucose"
+            android:textSize="18sp"
+            app:layout_constraintStart_toEndOf="@+id/tvKetone"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <NumberPicker
+            android:id="@+id/GlucoseNumberPicker"
+            android:layout_width="46dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:theme="@style/GlucoseNumberPickerTheme"
+            app:layout_constraintStart_toStartOf="@+id/tvGlucose"
+            app:layout_constraintTop_toBottomOf="@+id/tvGlucose" />
+
+        <TextView
+            android:id="@+id/tvGlucoseUnit"
+            android:layout_width="73dp"
+            android:layout_height="23dp"
+            android:layout_marginTop="8dp"
+            android:gravity="center_horizontal"
+            android:text="@string/glucose_measure"
+            android:textColor="@color/glucose"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="@+id/tvGlucose"
+            app:layout_constraintTop_toBottomOf="@+id/GlucoseNumberPicker" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tvNote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/lNote"
+        app:layout_constraintStart_toStartOf="@+id/tvMeasuringDate"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+
+    <EditText
+        android:id="@+id/etNote"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/edittext_border_color"
+        android:ems="10"
+        android:gravity="top"
+        android:inputType="textMultiLine"
+        android:maxLength="2000"
+        android:minLines="10"
+        android:scrollbars="vertical"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/bCancelAddEditMojo"
+        app:layout_constraintEnd_toEndOf="@+id/bOKAddEditMojo"
+        app:layout_constraintStart_toStartOf="@+id/constraintLayout"
+        app:layout_constraintTop_toTopOf="@+id/tvNote"
+        tools:text="@string/lNote" />
 
     <Button
         android:id="@+id/bOKAddEditMojo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="45dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:onClick="bOKAddEditMojoClick"
@@ -111,109 +187,13 @@
 
     <Button
         android:id="@+id/bCancelAddEditMojo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="45dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp"
         android:onClick="bCancelAddEditMojoClick"
         android:text="@string/bCancel"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/bOKAddEditMojo" />
-
-    <NumberPicker
-        android:id="@+id/KetoneNumberPickerInt"
-        android:layout_width="46dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:theme="@style/KetoneNumberPickerTheme"
-        app:layout_constraintStart_toStartOf="@+id/tvKetone"
-        app:layout_constraintTop_toBottomOf="@+id/tvKetone" />
-
-    <NumberPicker
-        android:id="@+id/KetoneNumberPickerFloat"
-        android:layout_width="46dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:theme="@style/KetoneNumberPickerTheme"
-        app:layout_constraintStart_toEndOf="@+id/tvKetoneSeparate"
-        app:layout_constraintTop_toTopOf="@+id/KetoneNumberPickerInt" />
-
-    <NumberPicker
-        android:id="@+id/GlucoseNumberPicker"
-        android:layout_width="46dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:theme="@style/GlucoseNumberPickerTheme"
-        app:layout_constraintEnd_toStartOf="@+id/WeightKgNumberPicker"
-        app:layout_constraintStart_toEndOf="@+id/KetoneNumberPickerFloat"
-        app:layout_constraintTop_toBottomOf="@+id/tvGlucose" />
-
-    <NumberPicker
-        android:id="@+id/WeightKgNumberPicker"
-        android:layout_width="46dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/WeightGramNumberPicker"
-        app:layout_constraintTop_toBottomOf="@+id/tvWeight" />
-
-    <NumberPicker
-        android:id="@+id/WeightGramNumberPicker"
-        android:layout_width="46dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvWeight" />
-
-    <TextView
-        android:id="@+id/tvKetoneSeparate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:layout_marginTop="80dp"
-        android:text="@string/separator"
-        android:textColor="@color/ketone"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/KetoneNumberPickerInt"
-        app:layout_constraintTop_toTopOf="@+id/KetoneNumberPickerInt" />
-
-    <TextView
-        android:id="@+id/tvKetoneUnit"
-        android:layout_width="101dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:gravity="center_horizontal"
-        android:text="@string/ketone_measure"
-        android:textColor="@color/ketone"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="@+id/KetoneNumberPickerInt"
-        app:layout_constraintTop_toBottomOf="@+id/KetoneNumberPickerInt" />
-
-    <TextView
-        android:id="@+id/tvGlucoseUnit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/glucose_measure"
-        android:textColor="@color/glucose"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="@+id/tvGlucose"
-        app:layout_constraintTop_toBottomOf="@+id/GlucoseNumberPicker" />
-
-    <TextView
-        android:id="@+id/tvWeightUnit_1"
-        android:layout_width="99dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:gravity="center_horizontal"
-        android:text="@string/weight_unit"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="@+id/WeightKgNumberPicker"
-        app:layout_constraintTop_toBottomOf="@+id/WeightKgNumberPicker" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

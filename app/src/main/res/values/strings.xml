@@ -4,7 +4,6 @@
     <string name="lGlucoseNumber">Глюкоза</string>
     <string name="lKetone">Кетоны</string>
     <string name="lGlucose">Глюкоза</string>
-    <string name="lWeight">Вес</string>
     <string name="lGKI">GKI</string>
     <!--<string name="hintKetone">Kenote index - mmol/L</string>-->
     <!--<string name="hintGlucose">Glucose index - mg/dL</string>-->
@@ -17,6 +16,8 @@
     <string name="glucose_measure">mg/dL</string>
     <string name="weight_unit">kg</string>
     <!--<string name="weight_unit_2">gram</string>-->
+
+    <string name="lWeight">Вес</string>
 
     <string name="action_search">Search</string>
 
@@ -39,5 +40,7 @@
     <string name="warning_import_db">Вы действительно импортировать базу данных?</string>
     <string name="warning_export_db">Вы действительно экспортировать базу данных?</string>
     <string name="pref_dayscount">За какое кол-во дней показывать показания</string>
+
+    <string name="lNote">Примечание</string>
 
 </resources>

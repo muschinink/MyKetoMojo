@@ -23,7 +23,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Environment;
@@ -40,7 +41,6 @@ import com.redkant.mymojo.db.Mojo;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -49,12 +49,12 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    public RecyclerView.Adapter mMojoAdapter;
+//    public RecyclerView.Adapter mMojoAdapter;
 
-    private MojoDatabaseHelper db;
-    public List<Mojo> listMojo;
+//    private MojoDatabaseHelper db;
+//    public List<Mojo> listMojo;
 
-    private FragmentChart mChartFragment;
+//    private FragmentChart mChartFragment;
 
     public static final int ADD_MOJO_REQUEST = 1000;
     public static final int EDIT_MOJO_REQUEST = 1001;
@@ -96,6 +96,10 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+        MenuItem mi = navigationView.getMenu().findItem(R.id.nav_gki_measurements);
+        mi.setChecked(true);
+        onNavigationItemSelected(mi);
+/*
         listMojo = new ArrayList<>();
         db = new MojoDatabaseHelper(this);
 
@@ -105,15 +109,20 @@ public class MainActivity extends AppCompatActivity
         db.getFilteredMojo(listMojo, "create_date >= '" + df.format(c.getTime()) + "'");
 
         mMojoAdapter = new MojoAdapter(this, listMojo);
+*/
 
+/*
         RecyclerView recyclerView = findViewById(R.id.rvMojo);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(mMojoAdapter);
+*/
 
+/*
         mChartFragment = (FragmentChart)getSupportFragmentManager().findFragmentById(R.id.frChart);
         if (mChartFragment != null) {
             mChartFragment.setData(listMojo);
         }
+*/
 
         mSQLiteImporterExporter = new SQLiteImporterExporter(getApplicationContext(), db_);
         mSQLiteImporterExporter.setOnImportListener(new SQLiteImporterExporter.ImportListener() {
@@ -147,7 +156,6 @@ public class MainActivity extends AppCompatActivity
     protected void onResume() {
         RefreshMojoDataSet();
 
-
         super.onResume();
     }
 
@@ -179,14 +187,14 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        // Создадим новый фрагмент
+
         switch (item.getItemId()) {
             case R.id.nav_gki_measurements:
-                Toast.makeText(this, "nav_gki_measurements", Toast.LENGTH_SHORT).show();
+                navFragmentClick(GKIMeasurements.class);
                 break;
             case R.id.nav_body_measurements:
-//                Intent intent = new Intent(MainActivity.this, BodyMeasurementsActivity.class);
-//                startActivity(intent);
-                Toast.makeText(this, "nav_body_measurements", Toast.LENGTH_SHORT).show();
+                navFragmentClick(BodyMeasurements.class);
                 break;
             case R.id.nav_settings:
                 navSettingsClick();
@@ -204,6 +212,24 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void navFragmentClick(Class fragmentClass) {
+        Fragment fragment = null;
+//        Class fragmentClass = null;
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Вставляем фрагмент, заменяя текущий фрагмент
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+        // Выделяем выбранный пункт меню в шторке
+//        item.setChecked(true);
+        // Выводим выбранный пункт в заголовке
+//        setTitle(item.getTitle());
     }
 
     private void navSettingsClick() {
@@ -323,7 +349,7 @@ public class MainActivity extends AppCompatActivity
 
                 mojo.setKetoNumber(Float.parseFloat(data.getStringExtra("KETONE")));
                 mojo.setGlucoseNumber(Integer.parseInt(data.getStringExtra("GLUCOSE")));
-                mojo.setWeight(Float.parseFloat(data.getStringExtra("WEIGHT")));
+                mojo.setNote(data.getStringExtra("NOTE"));
 
                 if (requestCode == EDIT_MOJO_REQUEST && mojo.getID() != 0) {
                     db.updateMojo(mojo);
@@ -345,15 +371,21 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void RefreshMojoDataSet() {
-//        db.getAllMojo(listMojo);
 
         Calendar c = Calendar.getInstance();
         c.add(Calendar.DAY_OF_MONTH, Integer.parseInt("-" + mPreferences.getInt("DaysCount", 7)));
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.sss", Locale.ENGLISH);
+
+        RecyclerView.Adapter mojoAdapter = GKIMeasurements.getmMojoAdapter();
+        MojoDatabaseHelper db = GKIMeasurements.getDb();
+        List<Mojo> listMojo = GKIMeasurements.getListMojo();
+
         db.getFilteredMojo(listMojo, "create_date >= '" + df.format(c.getTime()) + "'");
 
-        mMojoAdapter.notifyDataSetChanged();
-        mChartFragment.setData(listMojo);
+        mojoAdapter.notifyDataSetChanged();
+//        mChartFragment.setData(listMojo);
+
+        GKIMeasurements.getmChartFragment().setData(listMojo);
 
     }
 }
