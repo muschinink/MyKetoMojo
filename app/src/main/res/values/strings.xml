@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">My Keto Mojo</string>
-    <string name="lKetoNumber">K</string>
-    <string name="lGlucoseNumber">G</string>
-    <string name="lKetone">Ketone</string>
-    <string name="lGlucose">Glucose</string>
-    <string name="lWeight">Weight</string>
+    <string name="lKetoNumber">Кетоны</string>
+    <string name="lGlucoseNumber">Глюкоза</string>
+    <string name="lKetone">Кетоны</string>
+    <string name="lGlucose">Глюкоза</string>
+    <string name="lWeight">Вес</string>
     <string name="lGKI">GKI</string>
     <!--<string name="hintKetone">Kenote index - mmol/L</string>-->
     <!--<string name="hintGlucose">Glucose index - mg/dL</string>-->
@@ -29,6 +29,8 @@
     <string name="nav_export">Экспорт</string>
     <string name="nav_import">Импорт</string>
     <string name="nav_db_section">DB</string>
+    <string name="nav_gki_measurements">Замеры GKI</string>
+    <string name="nav_body_measurements">Замеры тела</string>
 
     <string name="btn_yes">Да</string>
     <string name="btn_no">Нет</string>

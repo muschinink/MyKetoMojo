@@ -180,6 +180,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.nav_gki_measurements:
+                Toast.makeText(this, "nav_gki_measurements", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.nav_body_measurements:
+//                Intent intent = new Intent(MainActivity.this, BodyMeasurementsActivity.class);
+//                startActivity(intent);
+                Toast.makeText(this, "nav_body_measurements", Toast.LENGTH_SHORT).show();
+                break;
             case R.id.nav_settings:
                 navSettingsClick();
                 break;

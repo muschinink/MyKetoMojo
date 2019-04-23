@@ -1,32 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:showIn="navigation_view">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:showIn="navigation_view"
+     >
 
-    <item
-        android:id="@+id/nav_settings"
-        android:icon="@drawable/ic_baseline_settings_20px"
-        android:title="@string/nav_settings" />
-    <!--
-        <group android:checkableBehavior="single">
-            <item
-                android:id="@+id/nav_settings"
-                android:icon="@drawable/ic_baseline_settings_20px"
-                android:title="@string/nav_settings" />
-            <item
-                android:id="@+id/nav_gallery"
-                android:icon="@drawable/ic_menu_gallery"
-                android:title="Gallery" />
-            <item
-                android:id="@+id/nav_slideshow"
-                android:icon="@drawable/ic_menu_slideshow"
-                android:title="Slideshow" />
-            <item
-                android:id="@+id/nav_manage"
-                android:icon="@drawable/ic_menu_manage"
-                android:title="Tools" />
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_gki_measurements"
+            android:icon="@drawable/ic_baseline_check_circle_outline_24px"
+            android:title="@string/nav_gki_measurements" />
+        <item
+            android:id="@+id/nav_body_measurements"
+            android:icon="@drawable/ic_baseline_straighten_24px"
+            android:title="@string/nav_body_measurements" />
     </group>
-    -->
+
+    <group
+        android:checkableBehavior="none"
+        android:id="@+id/nav_settings_group">
+
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_baseline_settings_20px"
+            android:title="@string/nav_settings" />
+    </group>
 
     <item android:title="@string/nav_db_section">
         <menu>
