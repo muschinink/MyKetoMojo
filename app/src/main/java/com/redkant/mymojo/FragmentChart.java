@@ -13,7 +13,7 @@ import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarEntry;
-import com.redkant.mymojo.db.Mojo;
+import com.redkant.mymojo.db.Gki;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,7 @@ public class FragmentChart extends Fragment {
     public BarChart mChart;
     private View mViewFragment;
 
-    public void setData(List<Mojo> list) {
+    public void setData(List<Gki> list) {
         List<BarEntry> yVals = new ArrayList<>();
 
         for (int i = list.size() - 1; i >= 0; i--) {
@@ -53,9 +53,9 @@ public class FragmentChart extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        mViewFragment = inflater.inflate(R.layout.fragment_chart, null);
+        mViewFragment = inflater.inflate(R.layout.fragment_gki_chart, null);
 
-        mChart = (BarChart) mViewFragment.findViewById(R.id.chart);
+        mChart = (BarChart) mViewFragment.findViewById(R.id.gki_chart);
 
         mChart.getDescription().setEnabled(false);
 

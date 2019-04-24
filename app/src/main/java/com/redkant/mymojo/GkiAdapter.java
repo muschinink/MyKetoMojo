@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.redkant.mymojo.db.Mojo;
+import com.redkant.mymojo.db.Gki;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -21,38 +21,38 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import static com.redkant.mymojo.MainActivity.DELETE_MOJO_REQUEST;
-import static com.redkant.mymojo.MainActivity.EDIT_MOJO_REQUEST;
+import static com.redkant.mymojo.MainActivity.DELETE_GKI_REQUEST;
+import static com.redkant.mymojo.MainActivity.EDIT_GKI_REQUEST;
 
-public class MojoAdapter extends RecyclerView.Adapter<MojoAdapter.ViewHolder> {
+public class GkiAdapter extends RecyclerView.Adapter<GkiAdapter.ViewHolder> {
 
-    private List<Mojo> mDataset;
+    private List<Gki> mDataset;
     private Context context;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
         public TextView tvCreateDate;
         public TextView tvKetoNumber;
-        public TextView tvSugarNumber;
+        public TextView tvGlucoseNumber;
         public TextView tvGKI;
 
-        public CardView cvMojoRow;
+        public CardView cvGkiRow;
 
         public ViewHolder(View v) {
             super(v);
 
-            tvCreateDate = v.findViewById(R.id.tvCreateDate);
+            tvCreateDate = v.findViewById(R.id.tvBodyCreateDate);
             tvKetoNumber = v.findViewById(R.id.tvKetoNumber);
-            tvSugarNumber = v.findViewById(R.id.tvSugarNumber);
+            tvGlucoseNumber = v.findViewById(R.id.tvGlucoseNumber);
             tvGKI = v.findViewById(R.id.tvGKI);
 
-            cvMojoRow = v.findViewById(R.id.cvMojoRow);
+            cvGkiRow = v.findViewById(R.id.cvGkiRow);
         }
 
-        public void bind(final Mojo item) {
+        public void bind(final Gki item) {
             tvCreateDate.setText(item.getCreateDate());
             tvKetoNumber.setText(Float.toString(item.getKetoNumber()));
-            tvSugarNumber.setText(Float.toString(item.getGlucoseNumber()));
+            tvGlucoseNumber.setText(Float.toString(item.getGlucoseNumber()));
 
             float gki = item.getGlucoseNumber()/18/item.getKetoNumber();
             float f = new BigDecimal(gki).setScale(1, RoundingMode.HALF_EVEN).floatValue();
@@ -62,7 +62,7 @@ public class MojoAdapter extends RecyclerView.Adapter<MojoAdapter.ViewHolder> {
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MojoAdapter(Context context, List<Mojo> myDataset) {
+    public GkiAdapter(Context context, List<Gki> myDataset) {
         mDataset = myDataset;
         this.context = context;
     }
@@ -71,7 +71,7 @@ public class MojoAdapter extends RecyclerView.Adapter<MojoAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.mojo_recycler_view_row, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.gki_recycler_view_row, parent, false);
 
         return new ViewHolder(v);
     }
@@ -85,7 +85,7 @@ public class MojoAdapter extends RecyclerView.Adapter<MojoAdapter.ViewHolder> {
 
         holder.bind(mDataset.get(position));
 
-        holder.cvMojoRow.setOnLongClickListener(new View.OnLongClickListener() {
+        holder.cvGkiRow.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 AlertDialog.Builder ad = new AlertDialog.Builder(context);
@@ -95,11 +95,11 @@ public class MojoAdapter extends RecyclerView.Adapter<MojoAdapter.ViewHolder> {
                 ad.setPositiveButton(R.string.btn_yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(context, AddEditMojoActivity.class);
-                        intent.putExtra("requestCode", DELETE_MOJO_REQUEST);
+                        Intent intent = new Intent(context, AddEditGkiActivity.class);
+                        intent.putExtra("requestCode", DELETE_GKI_REQUEST);
                         intent.putExtra("ID", mDataset.get(pos).getID());
 
-                        ((Activity) context).startActivityForResult(intent, DELETE_MOJO_REQUEST);
+                        ((Activity) context).startActivityForResult(intent, DELETE_GKI_REQUEST);
                     }
                 });
 
@@ -119,11 +119,11 @@ public class MojoAdapter extends RecyclerView.Adapter<MojoAdapter.ViewHolder> {
             }
         });
 
-        holder.cvMojoRow.setOnClickListener(new View.OnClickListener() {
+        holder.cvGkiRow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, AddEditMojoActivity.class);
-                intent.putExtra("requestCode", EDIT_MOJO_REQUEST);
+                Intent intent = new Intent(context, AddEditGkiActivity.class);
+                intent.putExtra("requestCode", EDIT_GKI_REQUEST);
                 intent.putExtra("ID", mDataset.get(pos).getID());
 
                 Date d = null;
@@ -139,7 +139,7 @@ public class MojoAdapter extends RecyclerView.Adapter<MojoAdapter.ViewHolder> {
                 intent.putExtra("GLUCOSE", String.valueOf(mDataset.get(pos).getGlucoseNumber()));
                 intent.putExtra("NOTE", String.valueOf(mDataset.get(pos).getNote()));
 
-                ((Activity) context).startActivityForResult(intent, EDIT_MOJO_REQUEST);
+                ((Activity) context).startActivityForResult(intent, EDIT_GKI_REQUEST);
             }
         });
     }

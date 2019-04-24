@@ -15,7 +15,6 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.NumberPicker;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -26,10 +25,10 @@ import java.util.Date;
 import java.util.Locale;
 
 import static com.redkant.mymojo.MainActivity.ADD_MOJO_REQUEST;
-import static com.redkant.mymojo.MainActivity.DELETE_MOJO_REQUEST;
-import static com.redkant.mymojo.MainActivity.EDIT_MOJO_REQUEST;
+import static com.redkant.mymojo.MainActivity.DELETE_GKI_REQUEST;
+import static com.redkant.mymojo.MainActivity.EDIT_GKI_REQUEST;
 
-public class AddEditMojoActivity extends AppCompatActivity {
+public class AddEditGkiActivity extends AppCompatActivity {
 
     int mID = 0;
     EditText etCreateDate;
@@ -83,14 +82,14 @@ public class AddEditMojoActivity extends AppCompatActivity {
 
         int requestCode = getIntent().getIntExtra("requestCode", 0);
 
-        if (requestCode == DELETE_MOJO_REQUEST) {
+        if (requestCode == DELETE_GKI_REQUEST) {
             Intent answerIntent = new Intent();
             answerIntent.putExtra("ID", getIntent().getIntExtra("ID", 0));
             setResult(RESULT_OK, answerIntent);
             finish();
         }
 
-        if (requestCode == EDIT_MOJO_REQUEST) {
+        if (requestCode == EDIT_GKI_REQUEST) {
 
             mID = getIntent().getIntExtra("ID", 0);
 

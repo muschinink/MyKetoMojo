@@ -2,7 +2,7 @@ package com.redkant.mymojo.db;
 
 import java.io.Serializable;
 
-public class Mojo implements Serializable {
+public class Gki implements Serializable {
 
     private int mID;
     private String mCreateDate;
@@ -10,21 +10,21 @@ public class Mojo implements Serializable {
     private int mGlucoseNumber;
     private String mNote;
 
-    public Mojo() {
+    public Gki() {
 
     }
 
-    public Mojo(String createDate, float ketoNumber) {
+    public Gki(String createDate, float ketoNumber) {
         mCreateDate = createDate;
         mKetoNumber = ketoNumber;
     }
 
-    public Mojo(String createDate, float ketoNumber, int glucoseNumber) {
+    public Gki(String createDate, float ketoNumber, int glucoseNumber) {
         this(createDate, ketoNumber);
         mGlucoseNumber = glucoseNumber;
     }
 
-    public Mojo(String createDate, float ketoNumber, int glucoseNumber, String note) {
+    public Gki(String createDate, float ketoNumber, int glucoseNumber, String note) {
         this(createDate, ketoNumber, glucoseNumber);
         mNote = note;
     }

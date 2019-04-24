@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cvMojoRow"
+        android:id="@+id/cvGkiRow"
         android:layout_width="match_parent"
         android:layout_height="62dp"
         android:layout_marginStart="8dp"
@@ -23,7 +23,7 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/tvCreateDate"
+                android:id="@+id/tvBodyCreateDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -44,7 +44,7 @@
                 android:textColor="@android:color/holo_blue_bright"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvCreateDate" />
+                app:layout_constraintTop_toBottomOf="@+id/tvBodyCreateDate" />
 
             <TextView
                 android:id="@+id/tvKetoNumber"
@@ -66,10 +66,10 @@
                 android:textColor="@color/glucose"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/tvKetoNumber"
-                app:layout_constraintTop_toBottomOf="@+id/tvCreateDate" />
+                app:layout_constraintTop_toBottomOf="@+id/tvBodyCreateDate" />
 
             <TextView
-                android:id="@+id/tvSugarNumber"
+                android:id="@+id/tvGlucoseNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -87,8 +87,8 @@
                 android:text="@string/lGKI"
                 android:textColor="@color/gkiColor"
                 android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/tvSugarNumber"
-                app:layout_constraintTop_toBottomOf="@+id/tvCreateDate" />
+                app:layout_constraintStart_toEndOf="@+id/tvGlucoseNumber"
+                app:layout_constraintTop_toBottomOf="@+id/tvBodyCreateDate" />
 
             <TextView
                 android:id="@+id/tvGKI"

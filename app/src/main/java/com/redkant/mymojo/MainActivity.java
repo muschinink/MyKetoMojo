@@ -36,7 +36,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
-import com.redkant.mymojo.db.Mojo;
+import com.redkant.mymojo.db.Gki;
+import com.redkant.mymojo.db.MojoDatabaseHelper;
 
 import java.io.File;
 import java.text.ParseException;
@@ -49,16 +50,9 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-//    public RecyclerView.Adapter mMojoAdapter;
-
-//    private MojoDatabaseHelper db;
-//    public List<Mojo> listMojo;
-
-//    private FragmentChart mChartFragment;
-
     public static final int ADD_MOJO_REQUEST = 1000;
-    public static final int EDIT_MOJO_REQUEST = 1001;
-    public static final int DELETE_MOJO_REQUEST = 1002;
+    public static final int EDIT_GKI_REQUEST = 1001;
+    public static final int DELETE_GKI_REQUEST = 1002;
 
     private static final int PERMISSION_REQUEST_CODE = 1010;
 
@@ -66,6 +60,8 @@ public class MainActivity extends AppCompatActivity
     public static String db_ = "mojo_db";
 
     SharedPreferences mPreferences;
+
+    private static StringBuilder currentActiveFragmentClass = new StringBuilder(30);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,39 +86,18 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, AddEditMojoActivity.class);
+                Intent intent = new Intent(MainActivity.this, AddEditGkiActivity.class);
                 intent.putExtra("requestCode", ADD_MOJO_REQUEST);
                 startActivityForResult(intent, ADD_MOJO_REQUEST);
             }
         });
 
-        MenuItem mi = navigationView.getMenu().findItem(R.id.nav_gki_measurements);
-        mi.setChecked(true);
-        onNavigationItemSelected(mi);
-/*
-        listMojo = new ArrayList<>();
-        db = new MojoDatabaseHelper(this);
-
-        Calendar c = Calendar.getInstance();
-        c.add(Calendar.DAY_OF_MONTH, Integer.parseInt("-" + mPreferences.getInt("DaysCount", 7)));
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.sss", Locale.ENGLISH);
-        db.getFilteredMojo(listMojo, "create_date >= '" + df.format(c.getTime()) + "'");
-
-        mMojoAdapter = new MojoAdapter(this, listMojo);
-*/
-
-/*
-        RecyclerView recyclerView = findViewById(R.id.rvMojo);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(mMojoAdapter);
-*/
-
-/*
-        mChartFragment = (FragmentChart)getSupportFragmentManager().findFragmentById(R.id.frChart);
-        if (mChartFragment != null) {
-            mChartFragment.setData(listMojo);
+        // если это первый запуск, то подгружаем фрейм с Gki
+        if (savedInstanceState == null) {
+            MenuItem mi = navigationView.getMenu().findItem(R.id.nav_gki_measurements);
+            mi.setChecked(true);
+            onNavigationItemSelected(mi);
         }
-*/
 
         mSQLiteImporterExporter = new SQLiteImporterExporter(getApplicationContext(), db_);
         mSQLiteImporterExporter.setOnImportListener(new SQLiteImporterExporter.ImportListener() {
@@ -154,7 +129,10 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onResume() {
-        RefreshMojoDataSet();
+        if (currentActiveFragmentClass != null
+                && currentActiveFragmentClass.toString().equals("com.redkant.mymojo.GkiMeasurements")) {
+            RefreshMojoDataSet();
+        }
 
         super.onResume();
     }
@@ -191,7 +169,7 @@ public class MainActivity extends AppCompatActivity
 
         switch (item.getItemId()) {
             case R.id.nav_gki_measurements:
-                navFragmentClick(GKIMeasurements.class);
+                navFragmentClick(GkiMeasurements.class);
                 break;
             case R.id.nav_body_measurements:
                 navFragmentClick(BodyMeasurements.class);
@@ -216,7 +194,7 @@ public class MainActivity extends AppCompatActivity
 
     private void navFragmentClick(Class fragmentClass) {
         Fragment fragment = null;
-//        Class fragmentClass = null;
+
         try {
             fragment = (Fragment) fragmentClass.newInstance();
         } catch (Exception e) {
@@ -226,6 +204,9 @@ public class MainActivity extends AppCompatActivity
         // Вставляем фрагмент, заменяя текущий фрагмент
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+
+        currentActiveFragmentClass.replace(0, currentActiveFragmentClass.length(), fragmentClass.getName());
+
         // Выделяем выбранный пункт меню в шторке
 //        item.setChecked(true);
         // Выводим выбранный пункт в заголовке
@@ -338,33 +319,33 @@ public class MainActivity extends AppCompatActivity
 
         MojoDatabaseHelper db = new MojoDatabaseHelper(this);
 
-        Mojo mojo = new Mojo();
-        mojo.setID(data.getIntExtra("ID", 0));
+        Gki gki = new Gki();
+        gki.setID(data.getIntExtra("ID", 0));
 
-        if (requestCode == ADD_MOJO_REQUEST || requestCode == EDIT_MOJO_REQUEST) {
+        if (requestCode == ADD_MOJO_REQUEST || requestCode == EDIT_GKI_REQUEST) {
             try {
                 SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.ENGLISH);
                 Date d = df.parse(data.getStringExtra("CREATE_DATE") + " " + data.getStringExtra("CREATE_TIME"));
-                mojo.setCreateDate((new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.sss", Locale.ENGLISH)).format(d));
+                gki.setCreateDate((new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.sss", Locale.ENGLISH)).format(d));
 
-                mojo.setKetoNumber(Float.parseFloat(data.getStringExtra("KETONE")));
-                mojo.setGlucoseNumber(Integer.parseInt(data.getStringExtra("GLUCOSE")));
-                mojo.setNote(data.getStringExtra("NOTE"));
+                gki.setKetoNumber(Float.parseFloat(data.getStringExtra("KETONE")));
+                gki.setGlucoseNumber(Integer.parseInt(data.getStringExtra("GLUCOSE")));
+                gki.setNote(data.getStringExtra("NOTE"));
 
-                if (requestCode == EDIT_MOJO_REQUEST && mojo.getID() != 0) {
-                    db.updateMojo(mojo);
+                if (requestCode == EDIT_GKI_REQUEST && gki.getID() != 0) {
+                    db.updateGki(gki);
                 }
 
                 if (requestCode == ADD_MOJO_REQUEST) {
-                    db.addMojo(mojo);
+                    db.addGki(gki);
                 }
             } catch (ParseException e) {
                 Log.i("***", "error");
             }
         }
 
-        if (requestCode == DELETE_MOJO_REQUEST && mojo.getID() != 0) {
-            db.deleteMojo(mojo);
+        if (requestCode == DELETE_GKI_REQUEST && gki.getID() != 0) {
+            db.deleteGki(gki);
         }
 
         RefreshMojoDataSet();
@@ -376,16 +357,16 @@ public class MainActivity extends AppCompatActivity
         c.add(Calendar.DAY_OF_MONTH, Integer.parseInt("-" + mPreferences.getInt("DaysCount", 7)));
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.sss", Locale.ENGLISH);
 
-        RecyclerView.Adapter mojoAdapter = GKIMeasurements.getmMojoAdapter();
-        MojoDatabaseHelper db = GKIMeasurements.getDb();
-        List<Mojo> listMojo = GKIMeasurements.getListMojo();
+        RecyclerView.Adapter mojoAdapter = GkiMeasurements.getGkiAdapter();
+        MojoDatabaseHelper db = GkiMeasurements.getDb();
+        List<Gki> listGki = GkiMeasurements.getGkiList();
 
-        db.getFilteredMojo(listMojo, "create_date >= '" + df.format(c.getTime()) + "'");
+        db.getGkiFiltered(listGki, "create_date >= '" + df.format(c.getTime()) + "'");
 
         mojoAdapter.notifyDataSetChanged();
-//        mChartFragment.setData(listMojo);
+//        mChartFragment.setData(listGki);
 
-        GKIMeasurements.getmChartFragment().setData(listMojo);
+        GkiMeasurements.getChartFragment().setData(listGki);
 
     }
 }

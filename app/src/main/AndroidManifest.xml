@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
-            android:name=".AddEditMojoActivity"
+            android:name=".AddEditGkiActivity"
             android:windowSoftInputMode="adjustPan"
             />
         <activity android:name=".MojoPreferenceActivity" />

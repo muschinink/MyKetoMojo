@@ -3,9 +3,7 @@ package com.redkant.mymojo;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,7 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.redkant.mymojo.db.Mojo;
+import com.redkant.mymojo.db.Gki;
+import com.redkant.mymojo.db.MojoDatabaseHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,32 +22,32 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class GKIMeasurements extends Fragment {
+public class GkiMeasurements extends Fragment {
 
-    private static RecyclerView.Adapter mMojoAdapter;
+    private static RecyclerView.Adapter sGkiAdapter;
     private static MojoDatabaseHelper db;
-    private static List<Mojo> listMojo;
+    private static List<Gki> sGkiList;
     SharedPreferences mPreferences;
-    private static FragmentChart mChartFragment;
+    private static FragmentChart sChartFragment;
 
-    public GKIMeasurements() {
+    public GkiMeasurements() {
         // Required empty public constructor
     }
 
-    public static FragmentChart getmChartFragment() {
-        return mChartFragment;
+    public static FragmentChart getChartFragment() {
+        return sChartFragment;
     }
 
     public static MojoDatabaseHelper getDb() {
         return db;
     }
 
-    public static List<Mojo> getListMojo() {
-        return listMojo;
+    public static List<Gki> getGkiList() {
+        return sGkiList;
     }
 
-    public static RecyclerView.Adapter getmMojoAdapter() {
-        return mMojoAdapter;
+    public static RecyclerView.Adapter getGkiAdapter() {
+        return sGkiAdapter;
     }
 
     @Override
@@ -59,24 +58,24 @@ public class GKIMeasurements extends Fragment {
 
         mPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
 
-        listMojo = new ArrayList<>();
+        sGkiList = new ArrayList<>();
         db = new MojoDatabaseHelper(getContext());
 
         Calendar c = Calendar.getInstance();
         c.add(Calendar.DAY_OF_MONTH, Integer.parseInt("-" + mPreferences.getInt("DaysCount", 7)));
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.sss", Locale.ENGLISH);
-        db.getFilteredMojo(listMojo, "create_date >= '" + df.format(c.getTime()) + "'");
+        db.getGkiFiltered(sGkiList, "create_date >= '" + df.format(c.getTime()) + "'");
 
-        mMojoAdapter = new MojoAdapter(getContext(), listMojo);
+        sGkiAdapter = new GkiAdapter(getContext(), sGkiList);
 
-        RecyclerView recyclerView = rootView.findViewById(R.id.rvMojo);
+        RecyclerView recyclerView = rootView.findViewById(R.id.rvGki);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(mMojoAdapter);
+        recyclerView.setAdapter(sGkiAdapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        mChartFragment = (FragmentChart)getChildFragmentManager().findFragmentById(R.id.frChart);
-        if (mChartFragment != null) {
-            mChartFragment.setData(listMojo);
+        sChartFragment = (FragmentChart)getChildFragmentManager().findFragmentById(R.id.frChart);
+        if (sChartFragment != null) {
+            sChartFragment.setData(sGkiList);
         }
 
         return rootView;

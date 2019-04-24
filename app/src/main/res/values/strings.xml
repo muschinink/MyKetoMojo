@@ -18,6 +18,19 @@
     <!--<string name="weight_unit_2">gram</string>-->
 
     <string name="lWeight">Вес</string>
+    <string name="lArmHighLeft">Бицепс левый</string>
+    <string name="lArmHighRight">правый</string>
+    <string name="lArmLowLeft">Предплечье левое</string>
+    <string name="lArmLowRight">правое</string>
+    <string name="lChest">Грудь</string>
+    <string name="lChestUnder">Под грудью</string>
+    <string name="lWaist">Талия</string>
+    <string name="lHipsHigh">Бока</string>
+    <string name="lHips">Ягодицы</string>
+    <string name="lThighLeft">Бедро левое</string>
+    <string name="lThighRight">правое</string>
+    <string name="lCalfLeft">Голень левая</string>
+    <string name="lCalfRight">правая</string>
 
     <string name="action_search">Search</string>
 
